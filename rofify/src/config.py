@@ -39,6 +39,14 @@ class Config:
         )
 
     @property
+    def recently_played_menu_icon(self):
+        return self._config.get(
+            section='formatting',
+            option='recently-played-menu-icon',
+            fallback="",
+        )
+
+    @property
     def playlist_track_label(self):
         return self._config.get(
             section='formatting',

@@ -10,7 +10,7 @@ class TrackItem(rofi_menu.Item):
     """
     The track item is meant to assist in quick selection of songs
     from playlists and searches. It starts playback of the track 
-    when selected  
+    when selected .
     """
     nonselectable = False
 
@@ -69,10 +69,10 @@ class TrackMenu(rofi_menu.Menu):
 
     async def generate_menu_items(self, meta):
         tracks = []
-        for offset,track in enumerate(self.tracks):
+        for offset,track in enumerate(self.tracks):    
             tracks.append(TrackItem(
                 track=track, 
-                offset=offset, 
+                offset=track['offset'] if track.get('offset') is not None else offset, 
                 text=track['name']
                 )   
             )
@@ -81,7 +81,7 @@ class TrackMenu(rofi_menu.Menu):
     @classmethod
     async def from_playlist(cls, playlist):
         """
-        Create a track menu from a playlist (as returned by spotipy)
+        Create a track menu from a playlist (as returned by spotipy).
         """
         prompt = "Search in {}".format(playlist['name'])
         playlists = (await spotify.async_playlist_tracks(playlist['id']))['items']
@@ -89,5 +89,5 @@ class TrackMenu(rofi_menu.Menu):
                 prompt=prompt, 
                 tracks=[playlist_item['track'] for playlist_item in playlists],
                 context=playlist['uri'],
-                track_formatter=playlist_track_label
+                track_formatter=playlist_track_label,
             )

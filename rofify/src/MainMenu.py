@@ -3,7 +3,7 @@ import asyncio
 import sys
 import os
 
-from rofify.src.TrackMenu import TrackMenu
+from rofify.src.RecentlyPlayedMenu import RecentlyPlayedMenu
 from rofify.src.PlaylistMenu import NestedPlaylistTrackMenu, PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
@@ -52,8 +52,10 @@ class MainMenu(rofi_menu.Menu):
         # get icons for the labels
         playlists_icon = config.playlist_menu_icon
         devices_icon = config.device_menu_icon
+        recently_played_menu_icon = config.recently_played_menu_icon
 
         return [
             CustomItem(), 
             rofi_menu.NestedMenu(text=f"{playlists_icon} Playlists", menu=PlaylistMenu()), 
+            rofi_menu.NestedMenu(text=f"{recently_played_menu_icon}  Recently Played", menu=RecentlyPlayedMenu()),
             rofi_menu.NestedMenu(text=f"{devices_icon} Devices", menu=DeviceMenu())]

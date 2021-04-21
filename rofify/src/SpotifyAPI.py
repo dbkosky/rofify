@@ -61,7 +61,6 @@ class SpotifyAPI:
         client = spotipy.Spotify(auth=token)
     else:
         sys.stderr.write(f"Can't get token for {config.username}")
-
     
     def __init__(self):
         self.device = Device(client=self.client)
@@ -101,5 +100,20 @@ class SpotifyAPI:
     async def playback_state(self):
         return self.client.current_playback()
 
+    async def get_recently_played(self):
+        tracks = self.client.current_user_recently_played()
+        items = tracks['items']
+        # set used to identify unique tracks, prevent duplication of results
+        track_uris = set()
+        tracks = []
+        # iterate through the items and add the unique tracks to the list
+        for index,item in enumerate(items):
+            if item['track']['uri'] not in track_uris \
+                and (track_uris.add(item['track']['uri']) or True):
+
+                item['track'].update({'offset':index})
+                tracks.append(item['track'])
+
+        return tracks
 
 spotify = SpotifyAPI()
