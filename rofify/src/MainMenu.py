@@ -7,6 +7,7 @@ from rofify.src.TrackMenu import TrackMenu
 from rofify.src.PlaylistMenu import NestedPlaylistTrackMenu, PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
+from rofify.src.config import config
 
 playlist = spotify.all_playlists()[0]
 
@@ -48,8 +49,11 @@ class MainMenu(rofi_menu.Menu):
         return rofi_menu.Operation(rofi_menu.OP_REFRESH_MENU)
 
     async def generate_menu_items(self,meta):
+        # get icons for the labels
+        playlists_icon = config.playlist_menu_icon
+        devices_icon = config.device_menu_icon
 
         return [
             CustomItem(), 
-            rofi_menu.NestedMenu(text="Playlists", menu=PlaylistMenu()), 
-            rofi_menu.NestedMenu(text="Devices", menu=DeviceMenu())]
+            rofi_menu.NestedMenu(text=f"{playlists_icon} Playlists", menu=PlaylistMenu()), 
+            rofi_menu.NestedMenu(text=f"{devices_icon} Devices", menu=DeviceMenu())]

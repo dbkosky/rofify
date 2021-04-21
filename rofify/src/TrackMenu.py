@@ -4,8 +4,7 @@ import asyncio
 from rofify.src.utils import playlist_track_label, substitute_pango_escape
 from rofi_menu.constants import OP_EXIT, OP_REFRESH_MENU
 from rofify.src.SpotifyAPI import spotify
-
-import sys
+from rofify.src.config import config
 
 class TrackItem(rofi_menu.Item):
     """
@@ -31,7 +30,8 @@ class TrackItem(rofi_menu.Item):
             # In the case where no formatter is provided, just 
             # display the track name
             
-            self.text = substitute_pango_escape(self.track['name'])
+            self.text = config.track_item_icon + \
+                substitute_pango_escape(self.track['name'])
         self.state = meta.get_state(self.id)
 
     async def on_select(self, meta):

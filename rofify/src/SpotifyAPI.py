@@ -9,8 +9,6 @@ from rofify.src.DeviceControls import Device
 
 import sys
 import asyncio
-lock = asyncio.Lock()
-
 
 # TODO CONFIG maximum limit for retrieving songs
 
@@ -51,18 +49,18 @@ class SpotifyAPI:
 
     # Token used in credential flow
     token = util.prompt_for_user_token(
-        config['credentials']['username'],
+        config.username,
         ' '.join(scope),
-        client_id=config['credentials']['client_id'],
-        client_secret=config['credentials']['client_secret'],
-        redirect_uri=config['credentials']['redirect_uri'],
+        client_id=config.client_id,
+        client_secret=config.client_secret,
+        redirect_uri=config.redirect_uri,
         cache_path=cache_location,
     )
 
     if token:
         client = spotipy.Spotify(auth=token)
     else:
-        sys.stderr.write("Can't get token for", config['credentials']['username'])
+        sys.stderr.write(f"Can't get token for {config.username}")
 
     
     def __init__(self):

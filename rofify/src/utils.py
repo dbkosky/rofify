@@ -57,7 +57,7 @@ def playlist_track_label(track):
     Parse the config and return a string formatted according to the config
     for the playlist-track-label option
     """
-    structure = config['formatting']['playlist-track-label']
+    structure = config.playlist_track_label
     matches = re.findall(track_pattern, structure)
     track_label = ""
     for index,match in enumerate(matches):
@@ -70,5 +70,3 @@ def playlist_track_label(track):
         )
 
     return track_label
-    
-
