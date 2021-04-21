@@ -1,4 +1,5 @@
 import asyncio
+# TODO Make consistent what is or isn't async
 
 class Playback:
     """
@@ -24,6 +25,14 @@ class Playback:
     @property
     def artist_names(self):
         return ', '.join([artist['name'] for artist in self._playback['item']['artists']])
+
+    @property
+    def shuffle_state(self):
+        return self._playback['shuffle_state']
+
+    @property
+    def repeat_state(self):
+        return self._playback['repeat_state']
 
     async def play_content(self, device_id, context_uri=None, uris=None, offset=None):
         self._client.start_playback(device_id, context_uri=context_uri, uris=uris, offset=offset)
@@ -60,4 +69,23 @@ class Playback:
         if self._playback is not None:
             self._client.next_track()
 
- 
+    async def toggle_shuffle(self, device_id=None):
+        await self.update_playback()
+        # Shuffle state can be retrieved by the playback
+        self._client.shuffle(
+            state = not self.shuffle_state,
+            device_id=device_id,
+        )
+
+    async def cycle_repeat(self, device_id=None):
+        await self.update_playback()
+        # Repeat state can be off, context (e.g. repeat album 
+        # or playlist), or track
+        states = ['off', 'context', 'track']
+        # find the index of the next state
+        next_state = states[(states.index(self.repeat_state) + 1) % len(states)]
+        self._client.repeat(
+            state=next_state, 
+            device_id=device_id,
+        )
+        await self.update_playback()

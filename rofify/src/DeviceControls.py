@@ -21,4 +21,3 @@ class Device:
 
     def all_devices(self):
         return self._client.devices()['devices']
-    

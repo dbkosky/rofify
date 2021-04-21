@@ -3,6 +3,7 @@ import asyncio
 import sys
 import os
 
+from rofify.src.Hotkeys import hotkeys
 from rofify.src.RecentlyPlayedMenu import RecentlyPlayedMenu
 from rofify.src.PlaylistMenu import NestedPlaylistTrackMenu, PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
@@ -22,27 +23,17 @@ class MainMenu(rofi_menu.Menu):
     prompt = None
     allow_user_input=False
 
-    # Map of corresponding actions for custom keybindings
-    input_map = {
-        '10':spotify.playback.previous,
-        '11':spotify.playback.next,
-        '12':spotify.playback.play_pause,
-    }
-
     async def pre_render(self,meta):
         # TODO fix formatting on playback label (e.g. for longer songs)
         self.prompt = await spotify.playback.get_playback_label()
 
     async def on_user_input(self, meta):
         """ 
-        Compare the rofi environment variable to find what kind of user input was given
-        i.e. was it simply return, or one of the specified hotkeys
+
         """
-        if os.getenv('ROFI_RETV') is not None:
+        await hotkeys.handle_user_input()
 
-            await self.input_map[os.getenv('ROFI_RETV')]() 
-            
-
+        # TODO use the meta to store useful information about the input of commands
         meta.session['text'] = meta.user_input 
         await asyncio.sleep(0.2)
 

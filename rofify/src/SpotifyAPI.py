@@ -24,6 +24,7 @@ class SpotifyAPI:
 
     # TODO reduce the scope to only the required permissions 
     # for operation
+    # TODO add appropriate exception handling
 
     scope = [
     # Playback reading permissions
@@ -95,7 +96,7 @@ class SpotifyAPI:
             
             playlist_tracks.update({'items':items})
 
-        return playlist_tracks    
+        return playlist_tracks
         
     async def playback_state(self):
         return self.client.current_playback()
