@@ -34,6 +34,14 @@ class Playback:
     def repeat_state(self):
         return self._playback['repeat_state']
 
+    @property
+    def current_item(self):
+        return self._playback['item']
+
+    @property
+    def playing(self):
+        return self._playback['is_playing']
+
     async def play_content(self, device_id, context_uri=None, uris=None, offset=None):
         self._client.start_playback(device_id, context_uri=context_uri, uris=uris, offset=offset)
 

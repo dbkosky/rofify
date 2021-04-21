@@ -9,6 +9,7 @@ from rofify.src.PlaylistMenu import NestedPlaylistTrackMenu, PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.config import config
+from rofify.src.utils import header_playback_label 
 
 playlist = spotify.all_playlists()[0]
 
@@ -24,8 +25,8 @@ class MainMenu(rofi_menu.Menu):
     allow_user_input=False
 
     async def pre_render(self,meta):
-        # TODO fix formatting on playback label (e.g. for longer songs)
-        self.prompt = await spotify.playback.get_playback_label()
+        await spotify.playback.update_playback()
+        self.prompt = header_playback_label(spotify.playback)
 
     async def on_user_input(self, meta):
         """ 
@@ -34,6 +35,7 @@ class MainMenu(rofi_menu.Menu):
         await hotkeys.handle_user_input()
 
         # TODO use the meta to store useful information about the input of commands
+        # then the custom item at the top of the menu to display last command entered
         meta.session['text'] = meta.user_input 
         await asyncio.sleep(0.2)
 

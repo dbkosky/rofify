@@ -14,6 +14,7 @@ class Config:
         if not self._config.read(config_dir):
             raise FileNotFoundError(f"Cannot find config file at {config_dir}")
 
+    # TODO repetitious, look at refactoring 
     @property
     def playlist_menu_icon(self):
         return self._config.get(
@@ -47,10 +48,82 @@ class Config:
         )
 
     @property
+    def shuffle_off(self):
+        return self._config.get(
+            section='formatting',
+            option='shuffle-off',
+            fallback="",
+        )
+
+    @property
+    def shuffle_on(self):
+        return self._config.get(
+            section='formatting',
+            option='shuffle-on',
+            fallback="",
+        )
+
+    @property
+    def repeat_off(self):
+        return self._config.get(
+            section='formatting',
+            option='repeat-off',
+            fallback="",
+        )
+
+    @property
+    def repeat_context(self):
+        return self._config.get(
+            section='formatting',
+            option='repeat-context',
+            fallback="",
+        )
+
+    @property
+    def repeat_track(self):
+        return self._config.get(
+            section='formatting',
+            option='repeat-track',
+            fallback="",
+        )
+
+    @property
+    def paused(self):
+        return self._config.get(
+            section='formatting',
+            option='paused',
+            fallback="",
+        )
+
+    @property
+    def playing(self):
+        return self._config.get(
+            section='formatting',
+            option='playing',
+            fallback="",
+        )
+    
+    @property
+    def nothing_playing(self):
+        return self._config.get(
+            section='formatting',
+            option='nothing-playing',
+            fallback="",
+        )
+
+    @property
     def playlist_track_label(self):
         return self._config.get(
             section='formatting',
             option='playlist-track-label',
+            fallback=''
+        )
+
+    @property
+    def header_playback_label(self):
+        return self._config.get(
+            section='formatting',
+            option='header-playback-label',
             fallback=''
         )
 
