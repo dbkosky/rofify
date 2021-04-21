@@ -6,5 +6,5 @@
 export WIDTH=-90
 rofi -modi mymenu:$PWD/rofify/__main__.py\
 	-show mymenu -theme rofify_theme.rasi\
-	-config tmp.config -width $WIDTH\
+	-config rofify.config -width $WIDTH\
 	-show-icons
