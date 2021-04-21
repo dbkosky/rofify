@@ -38,6 +38,14 @@ class Config:
             fallback="",
         )
 
+    @property
+    def playlist_track_label(self):
+        return self._config.get(
+            section='formatting',
+            option='playlist-track-label',
+            fallback=''
+        )
+
     def check_credentials(self, credential):
         if 'credentials' not in self._config.sections():
             raise KeyError(

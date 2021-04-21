@@ -59,7 +59,7 @@ def playlist_track_label(track):
     """
     structure = config.playlist_track_label
     matches = re.findall(track_pattern, structure)
-    track_label = ""
+    track_label = config.track_item_icon + " "
     for index,match in enumerate(matches):
         field_text = track_directory[match](track)
         margin = 0 if index+1 == len(matches) else 3 
