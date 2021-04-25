@@ -1,6 +1,5 @@
 from rofify.src.SpotifyAPI import spotify
 import os
-import sys
 
 class Hotkeys:
 

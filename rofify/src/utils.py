@@ -1,7 +1,6 @@
 from rofify.src.config import config
 import re
 import os
-
 # get client width
 width = os.getenv("WIDTH")
 if width is not None\
@@ -72,14 +71,17 @@ def playlist_track_label(track):
 
     return track_label
 
-def header_playback_label(playback):
+async def header_playback_label(playback):
     """
     Parse the config and return a string formatted according to the config
     for the header-playback-label option
     """
     # First check to see if anything is playing
     if playback._playback is None:
-        return config.nothing_playing
+        # Make sure that nothing really is playing
+        await playback.update_playback()
+        if playback._playback is None:
+            return config.nothing_playing
 
     # First we need to specify what is retrieved by the playback options
     playback_directory = {

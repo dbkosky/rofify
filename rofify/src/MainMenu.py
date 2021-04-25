@@ -1,6 +1,5 @@
 import rofi_menu
 import asyncio
-import sys
 import os
 
 from rofify.src.Hotkeys import hotkeys
@@ -25,8 +24,7 @@ class MainMenu(rofi_menu.Menu):
     allow_user_input=False
 
     async def pre_render(self,meta):
-        await spotify.playback.update_playback()
-        self.prompt = header_playback_label(spotify.playback)
+        self.prompt = await header_playback_label(spotify.playback)
 
     async def on_user_input(self, meta):
         """ 
@@ -36,8 +34,7 @@ class MainMenu(rofi_menu.Menu):
 
         # TODO use the meta to store useful information about the input of commands
         # then the custom item at the top of the menu to display last command entered
-        meta.session['text'] = meta.user_input 
-        await asyncio.sleep(0.2)
+        meta.session['text'] = meta.user_input
 
         return rofi_menu.Operation(rofi_menu.OP_REFRESH_MENU)
 

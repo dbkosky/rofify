@@ -2,7 +2,6 @@
 from rofify.src.SpotifyAPI import spotify
 from rofi_menu import Menu, Item, BackItem, Operation, constants
 import asyncio
-import sys
 
 # Formatting for currently active device
 ACTIVE_COLOR = "#48cf5c"

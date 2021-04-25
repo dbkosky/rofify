@@ -55,7 +55,7 @@ class Playback:
             if self._playback['is_playing']:
                 return "Playing: {} - {}".format(self.song_name, self.artist_names)
             else:
-                return "Paused: {} - {}".format(self.song_name, self.artist_names)
+                return "Paused:  {} - {}".format(self.song_name, self.artist_names)
         else:
             return "Nothing is playing"
 
@@ -66,24 +66,33 @@ class Playback:
                 self._client.pause_playback()
             else:
                 self._client.start_playback()
+            self._playback['is_playing'] = not self._playback['is_playing']
 
     async def previous(self):
         await self.update_playback()
         if self._playback is not None:
             self._client.previous_track()
+            # Wait for a short time before updating playback
+            await asyncio.sleep(0.2)
+            await self.update_playback()
 
     async def next(self):
         await self.update_playback()
         if self._playback is not None:
             self._client.next_track()
+            # Wait for a short time before updating playback
+            await asyncio.sleep(0.2)
+            await self.update_playback()
 
     async def toggle_shuffle(self, device_id=None):
         await self.update_playback()
         # Shuffle state can be retrieved by the playback
+        next_shuffle = not self.shuffle_state
         self._client.shuffle(
-            state = not self.shuffle_state,
+            state = next_shuffle,
             device_id=device_id,
         )
+        self._playback['shuffle_state'] = next_shuffle
 
     async def cycle_repeat(self, device_id=None):
         await self.update_playback()
@@ -96,4 +105,4 @@ class Playback:
             state=next_state, 
             device_id=device_id,
         )
-        await self.update_playback()
+        self._playback['repeat_state'] = next_state
