@@ -3,7 +3,7 @@ import asyncio
 import os
 
 from rofify.src.Hotkeys import hotkeys
-from rofify.src.RecentlyPlayedMenu import RecentlyPlayedMenu
+from rofify.src.RecentlyPlayedMenu import NestedRecentlyPlayedMenu
 from rofify.src.PlaylistMenu import NestedPlaylistTrackMenu, PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
@@ -47,5 +47,5 @@ class MainMenu(rofi_menu.Menu):
         return [
             CustomItem(), 
             rofi_menu.NestedMenu(text=f"{playlists_icon} Playlists", menu=PlaylistMenu()), 
-            rofi_menu.NestedMenu(text=f"{recently_played_menu_icon}  Recently Played", menu=RecentlyPlayedMenu()),
+            NestedRecentlyPlayedMenu(),
             rofi_menu.NestedMenu(text=f"{devices_icon} Devices", menu=DeviceMenu())]

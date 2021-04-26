@@ -1,7 +1,6 @@
 import asyncio
 from rofi_menu import NestedMenu, Menu, Operation, constants, BackItem
 from rofify.src.TrackMenu import TrackMenu
-
 from rofify.src.SpotifyAPI import spotify
 
 class NestedPlaylistTrackMenu(NestedMenu):
