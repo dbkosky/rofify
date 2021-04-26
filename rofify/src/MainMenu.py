@@ -3,8 +3,9 @@ import asyncio
 import os
 
 from rofify.src.Hotkeys import hotkeys
-from rofify.src.RecentlyPlayedMenu import NestedRecentlyPlayedMenu
-from rofify.src.PlaylistMenu import NestedPlaylistTrackMenu, PlaylistMenu
+from rofify.src.DynamicNestedMenu import DynamicNestedMenu
+from rofify.src.RecentlyPlayedMenu import RecentlyPlayedMenu
+from rofify.src.PlaylistMenu import PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.config import config
@@ -42,10 +43,10 @@ class MainMenu(rofi_menu.Menu):
         # get icons for the labels
         playlists_icon = config.playlist_menu_icon
         devices_icon = config.device_menu_icon
-        recently_played_menu_icon = config.recently_played_menu_icon
-
+        recently_played_icon = config.recently_played_menu_icon
         return [
-            CustomItem(), 
-            rofi_menu.NestedMenu(text=f"{playlists_icon} Playlists", menu=PlaylistMenu()), 
-            NestedRecentlyPlayedMenu(),
-            rofi_menu.NestedMenu(text=f"{devices_icon} Devices", menu=DeviceMenu())]
+            CustomItem(),
+            DynamicNestedMenu(f"{playlists_icon} Playlists", sub_menu_type=PlaylistMenu), 
+            DynamicNestedMenu(f"{recently_played_icon} Recently Played", sub_menu_type=RecentlyPlayedMenu),
+            DynamicNestedMenu(f"{devices_icon} Devices", sub_menu_type=DeviceMenu),
+            ]
