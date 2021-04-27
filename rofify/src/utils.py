@@ -106,17 +106,15 @@ async def header_playback_label(playback):
         # These elements are found 
         if track_directory.get(match) is not None:
             field = track_directory[match](playback.current_item)
-            playback_label += substitute_pango_escape(
-                truncate(field, ((width-20)//len(matches))-2, margin, add_whitespace=False)
-            )
+            playback_label += truncate(field, ((width-20)//len(matches))-2, margin, add_whitespace=False)
+
             if index + 1 < len(matches) and (matches[index+1] in track_directory.keys()): 
                 playback_label += " - "
 
         # These elements are formatted differently (i.e. without seperator)
         elif playback_directory.get(match) is not None:
             field = playback_directory[match](playback)
-            playback_label += substitute_pango_escape(
-                f" {field} "
-            )
+            playback_label += f" {field} "
+
 
     return playback_label
