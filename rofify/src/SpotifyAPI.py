@@ -113,25 +113,16 @@ class SpotifyAPI:
 
         return saved_tracks
 
+    async def async_search(self, search):
+        """
+        Construct a query and return the results
+        """
+        query = "+".join(search.split())
+        sys.stderr.write(f" \n\n QUERY: {query} \n\n")
+        return self.client.search(query)['tracks']['items']
 
     async def playback_state(self):
         return self.client.current_playback()
-
-    async def get_recently_played(self):
-        tracks = self.client.current_user_recently_played()
-        items = tracks['items']
-        # set used to identify unique tracks, prevent duplication of results
-        track_uris = set()
-        tracks = []
-        # iterate through the items and add the unique tracks to the list
-        for index,item in enumerate(items):
-            if item['track']['uri'] not in track_uris \
-                and (track_uris.add(item['track']['uri']) or True):
-
-                item['track'].update({'offset':index})
-                tracks.append(item['track'])
-
-        return tracks
 
     async def get_recently_played(self):
         tracks = self.client.current_user_recently_played()
