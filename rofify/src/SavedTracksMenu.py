@@ -11,7 +11,7 @@ class SavedTracksMenu(TrackMenu):
     """
     def __init__(self):
         super().__init__(
-            prompt="Recently Played", 
+            prompt="Saved Tracks", 
             track_formatter=playlist_track_label
         )
 
