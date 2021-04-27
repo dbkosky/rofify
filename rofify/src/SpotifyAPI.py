@@ -77,29 +77,61 @@ class SpotifyAPI:
     async def async_all_playlists(self):
         return self.client.current_user_playlists()['items']
 
-    async def async_playlist_tracks(self, playlist_id, offset=0, items=[]):
+    async def async_playlist_tracks(self, playlist_id):
         """
         Aqcuire all playlist tracks for a given playlist 
         """
 
         # The API at present only allows the retrieval of 
         # 100 playlist tracks at a time
-        limit = 100
-        # obtain the playlist piecemeal, construct it, 
-        # return it as a singluar dictionary
+        # The spotipy next() function can be used to retrieve
+        # all of the entries
 
-        playlist_tracks = self.client.playlist_tracks(playlist_id)
-        if playlist_tracks['total'] > limit:
-            items = playlist_tracks['items']
-            for offset in range(limit, playlist_tracks['total'], limit):
-                items += self.client.playlist_tracks(playlist_id, offset=offset)['items']
-            
-            playlist_tracks.update({'items':items})
+        track_page = self.client.playlist_tracks(playlist_id)
+        playlist_tracks = track_page
+        while track_page['next']:
+            track_page = self.client.next(track_page)
+            playlist_tracks['items'] += track_page['items']
 
         return playlist_tracks
-        
+
+    async def async_all_saved_tracks(self):
+        """
+        Aqcuire all saved tracks 
+        """
+
+        # The API at present only allows the retrieval of 
+        # 50 tracks at a time
+        # The spotipy next() function can be used to retrieve
+        # all of the entries
+
+        track_page = self.client.current_user_saved_tracks()
+        saved_tracks = track_page
+        while track_page['next']:
+            track_page = self.client.next(track_page)
+            saved_tracks['items'] += track_page['items']
+
+        return saved_tracks
+
+
     async def playback_state(self):
         return self.client.current_playback()
+
+    async def get_recently_played(self):
+        tracks = self.client.current_user_recently_played()
+        items = tracks['items']
+        # set used to identify unique tracks, prevent duplication of results
+        track_uris = set()
+        tracks = []
+        # iterate through the items and add the unique tracks to the list
+        for index,item in enumerate(items):
+            if item['track']['uri'] not in track_uris \
+                and (track_uris.add(item['track']['uri']) or True):
+
+                item['track'].update({'offset':index})
+                tracks.append(item['track'])
+
+        return tracks
 
     async def get_recently_played(self):
         tracks = self.client.current_user_recently_played()

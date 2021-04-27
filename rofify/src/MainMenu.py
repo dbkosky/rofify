@@ -5,6 +5,7 @@ import os
 from rofify.src.Hotkeys import hotkeys
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.RecentlyPlayedMenu import RecentlyPlayedMenu
+from rofify.src.SavedTracksMenu import SavedTracksMenu
 from rofify.src.PlaylistMenu import PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
@@ -49,4 +50,5 @@ class MainMenu(rofi_menu.Menu):
             DynamicNestedMenu(f"{playlists_icon} Playlists", sub_menu_type=PlaylistMenu), 
             DynamicNestedMenu(f"{recently_played_icon} Recently Played", sub_menu_type=RecentlyPlayedMenu),
             DynamicNestedMenu(f"{devices_icon} Devices", sub_menu_type=DeviceMenu),
+            DynamicNestedMenu(f" Saved Tracks", sub_menu_type=SavedTracksMenu)
             ]
