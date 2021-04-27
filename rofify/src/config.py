@@ -48,6 +48,14 @@ class Config:
         )
 
     @property
+    def saved_tracks_menu_icon(self):
+        return self._config.get(
+            section='formatting',
+            option='saved-menu-icon',
+            fallback="",
+        )
+
+    @property
     def shuffle_off(self):
         return self._config.get(
             section='formatting',
