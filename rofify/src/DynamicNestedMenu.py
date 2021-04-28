@@ -18,7 +18,6 @@ class DynamicNestedMenu(NestedMenu):
         Since the subenu is only needed upon selection (or selection of items within the submenu), 
         we will only build the submenu at this point if the meta.selected_id is deeper than this level, 
         and matches the nested menu. 
-
         """
         obj = await super().build(parent_menu=parent_menu, item_id=item_id, meta=meta)
         # Only build the sub menu if the item has been selected

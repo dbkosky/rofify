@@ -56,6 +56,14 @@ class Config:
         )
 
     @property
+    def search_tracks_menu_icon(self):
+        return self._config.get(
+            section='formatting',
+            option='search-tracks-menu-icon',
+            fallback="",
+        )
+
+    @property
     def shuffle_off(self):
         return self._config.get(
             section='formatting',
