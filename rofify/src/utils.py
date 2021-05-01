@@ -1,7 +1,7 @@
 from rofify.src.config import config
 import re
 import os
-import sys
+
 # get client width
 width = os.getenv("WIDTH")
 if width is not None\

@@ -64,8 +64,8 @@ class SpotifyAPI:
         sys.stderr.write(f"Can't get token for {config.username}")
     
     def __init__(self):
-        self.device = Device(client=self.client)
-        self.playback = Playback(client=self.client)
+        self.device = Device(parent=self)
+        self.playback = Playback(parent=self)
 
     # TODO settle on using normal or async consistently
     def all_playlists(self):

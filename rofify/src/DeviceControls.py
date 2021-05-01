@@ -5,8 +5,9 @@ class Device:
     Subdivision of the SpotifyAPI class. Delegates functions relating to controlling
     the current device.
     """
-    def __init__(self, client=None):
-        self._client = client
+    def __init__(self, parent=None):
+        self.parent = parent
+        self._client = self.parent.client
         self.current_device = self.get_active_device()
 
     def transfer_playback(self, to_device_id):

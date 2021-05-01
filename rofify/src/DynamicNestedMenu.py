@@ -1,6 +1,5 @@
 import asyncio
 from rofi_menu import NestedMenu, Operation, constants
-from rofify.src.TrackMenu import TrackMenu
 from rofify.src.SpotifyAPI import spotify
 import sys
 class DynamicNestedMenu(NestedMenu):

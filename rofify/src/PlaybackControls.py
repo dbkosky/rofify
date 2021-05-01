@@ -7,10 +7,11 @@ class Playback:
     the current user's playback and getting information regarding the user's playback
     """
 
-    def __init__(self, client=None):
+    def __init__(self, parent=None):
         # Playback as dictionary provided by the spotify api
         self._playback = None
-        self._client = client
+        self.parent = parent
+        self._client = self.parent.client
 
 
     async def update_playback(self):
