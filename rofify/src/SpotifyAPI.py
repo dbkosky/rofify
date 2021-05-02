@@ -113,22 +113,23 @@ class SpotifyAPI:
 
         return saved_tracks
 
-    async def async_search(self, search, limit=50, pages=4):
+    async def async_search(self, search, limit=50, type='track', pages=4):
         """
         Construct a query and return the results
         """
+
         query = "+".join(search.split())
-        tracks = self.client.search(query, limit=limit)['tracks']
+        search_content = self.client.search(query, limit=limit, type=type)[type+'s']
         pages_left = pages - 1 
-        while pages_left and tracks['next']:
-            next_page = self.client.next(tracks)['tracks']
-            tracks.update({
+        while pages_left and search_content['next']:
+            next_page = self.client.next(search_content)[type+'s']
+            search_content.update({
                 'next':next_page['next'],
             })
-            tracks['items'] += next_page['items']
+            search_content['items'] += next_page['items']
             pages_left -= 1
 
-        return tracks
+        return search_content
 
     async def playback_state(self):
         return self.client.current_playback()
