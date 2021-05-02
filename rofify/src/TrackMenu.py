@@ -75,10 +75,12 @@ class TrackItem(rofi_menu.Item):
         If the 'popup_device_menu' flag is set in meta, , build the device menu.
         """
         if meta.session.get('popup_device_menu'):
-            obj = await DynamicNestedMenu(text=self.text, sub_menu_type=DeviceMenu).build(
-                parent_menu=parent_menu,
-                item_id=item_id,
-                meta=meta,
+            obj = await DynamicNestedMenu(
+                text=parent_menu.track_formatter(self.track),
+                sub_menu_type=DeviceMenu).build(
+                    parent_menu=parent_menu,
+                    item_id=item_id,
+                    meta=meta,
             )
             return obj
         else:

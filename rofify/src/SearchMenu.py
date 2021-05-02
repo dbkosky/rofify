@@ -29,21 +29,28 @@ class SearchMenu(TrackMenu):
             self.parent_menu.items = [back_item, self]
             return await super().on_select(meta)
 
-    async def build(self, menu_id, meta):
-        """
-        This needs to be different in order to allow user input, since without a specific
-        object to provide a point to return to, we need to set the environment variable to 
-        return to this point
-        """
+    # async def build(self, menu_id, meta):
+    #     """
+    #     This needs to be different in order to allow user input, since without a specific
+    #     object to provide a point to return to, we need to set the environment variable to
+    #     return to this point
+    #     """
 
-        obj = self.clone()
-        obj.id = menu_id
-        obj.items = await obj.build_menu_items(meta=meta)
-        return obj
+    #     obj = self.clone()
+    #     obj.id = menu_id
+    #     obj.items = await obj.build_menu_items(meta=meta)
+    #     return obj
 
     async def generate_menu_items(self, meta):
         """ Generate track items from search according to user input """
-        
+
+        # Set the element to bring up device menu if there is no set device
+        meta.session.setdefault('popup_device_menu', False)
+        if not spotify.device.current_device:
+            meta.session['popup_device_menu'] = True
+        else:
+            meta.session['popup_device_menu'] = False
+
         if meta.user_input:
             meta.session['search'] = meta.user_input
         elif meta:
@@ -60,6 +67,7 @@ class SearchMenu(TrackMenu):
                 TrackItem(
                     track=track,
                     offset=None,
+                    text=track['name'],
                 )
             )
         return items
