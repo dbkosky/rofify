@@ -3,6 +3,8 @@ from rofify.src.SpotifyAPI import spotify
 from rofi_menu import Menu, Item, BackItem, Operation, constants
 import asyncio
 
+import sys
+
 # Formatting for currently active device
 ACTIVE_COLOR = "#48cf5c"
 # TODO move this to utils
@@ -41,6 +43,14 @@ class DeviceMenu(Menu):
     Menu accessible from the top menu that allows user to see the available devices and 
     transfer playback between them
     """
+    def __init__(self, prompt=None):
+        if prompt:
+            super().__init__(prompt=prompt)
+        elif not spotify.device.current_device:
+            super().__init__(prompt="Select a device")
+        else:
+            super().__init__()
+
     # TODO add a method to allow user to favourite devices and cache device id
     async def generate_menu_items(self, meta):
 

@@ -77,10 +77,12 @@ class TrackItem(rofi_menu.Item):
         if meta.session.get('popup_device_menu'):
             obj = await DynamicNestedMenu(
                 text=parent_menu.track_formatter(self.track),
-                sub_menu_type=DeviceMenu).build(
-                    parent_menu=parent_menu,
-                    item_id=item_id,
-                    meta=meta,
+                sub_menu_type=DeviceMenu,
+                prompt='Select a device',
+            ).build(
+                parent_menu=parent_menu,
+                item_id=item_id,
+                meta=meta,
             )
             return obj
         else:
