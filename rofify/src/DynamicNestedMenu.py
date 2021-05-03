@@ -19,10 +19,15 @@ class DynamicNestedMenu(NestedMenu):
         and matches the nested menu. 
         """
         obj = await super().build(parent_menu=parent_menu, item_id=item_id, meta=meta)
-        # Only build the sub menu if the item has been selected
-        if item_id is not None and meta.selected_id is not None and\
+        # Only build the sub menu if the item has been selected or the nested menu was part of the
+        # previous menu selection and there is no selected item (i.e. there was user input)
+        if (item_id is not None and meta.selected_id is not None and\
             len(item_id) < len(meta.selected_id) and\
-            meta.selected_id[len(item_id)-1] == item_id[-1]:
+            meta.selected_id[len(item_id)-1] == item_id[-1])\
+            or\
+            (meta.selected_id is None and\
+             meta.session.get('last_active_menu') and\
+             meta.session['last_active_menu'][:len(item_id)] == item_id):
 
             if asyncio.iscoroutinefunction(self.sub_menu_type):
                 self.sub_menu = await self.sub_menu_type(**self.sub_menu_args)

@@ -11,15 +11,7 @@ from rofify.src.SearchMenu import SearchMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.Hotkeys import hotkeys
 from rofify.src.config import config
-from rofify.src.utils import header_playback_label 
-
-playlist = spotify.all_playlists()[0]
-
-class CustomItem(rofi_menu.Item):
-    # TODO Cusom item should provide user info on what they're doing
-    async def render(self, meta):
-        entered_text = meta.session.get("text", "[ no text ]")
-        return f"You entered: {entered_text}"
+from rofify.src.utils import header_playback_label
 
 class MainMenu(rofi_menu.Menu):
     icon = None
@@ -27,6 +19,8 @@ class MainMenu(rofi_menu.Menu):
     allow_user_input = True
 
     async def pre_render(self,meta):
+        """ Display information regarding the current playback in the prompt
+        """
         self.prompt = await header_playback_label(spotify.playback)
 
     async def on_user_input(self, meta):
@@ -34,11 +28,6 @@ class MainMenu(rofi_menu.Menu):
 
         """
         await hotkeys.handle_user_input()
-
-        # TODO use the meta to store useful information about the input of commands
-        # then the custom item at the top of the menu to display last command entered
-        meta.session['text'] = meta.user_input
-
         return rofi_menu.Operation(rofi_menu.OP_REFRESH_MENU)
 
     async def generate_menu_items(self,meta):
@@ -52,10 +41,9 @@ class MainMenu(rofi_menu.Menu):
         saved_tracks_icon = config.saved_tracks_menu_icon
         search_tracks_icon = config.search_tracks_menu_icon
         return [
-            CustomItem(),
-            DynamicNestedMenu(f"{playlists_icon} Playlists", sub_menu_type=PlaylistMenu), 
+            DynamicNestedMenu(f"{playlists_icon} Playlists", sub_menu_type=PlaylistMenu),
             DynamicNestedMenu(f"{recently_played_icon} Recently Played", sub_menu_type=RecentlyPlayedMenu),
             DynamicNestedMenu(f"{devices_icon} Devices", sub_menu_type=DeviceMenu),
             DynamicNestedMenu(f"{saved_tracks_icon} Saved Tracks", sub_menu_type=SavedTracksMenu),
-            rofi_menu.NestedMenu(f"{search_tracks_icon} Search", menu=SearchMenu())
+            DynamicNestedMenu(f"{search_tracks_icon} Search", sub_menu_type=SearchMenu),
             ]
