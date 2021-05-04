@@ -1,17 +1,12 @@
 from rofi_menu import Menu, Operation, constants, Item, BackItem
+from rofify.src.DynamicNestedMenu import DynamicNestedMenu
+from rofify.src.AlbumMenu import AlbumMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.TrackMenu import TrackItem, TrackMenu
 from rofify.src.utils import playlist_track_label
 import sys
 
-class SearchMenu(TrackMenu):
-
-    allow_user_input = True
-
-    def __init__(self):
-        super().__init__(track_formatter=playlist_track_label)
-
-    class SearchItem(Item):
+class SearchItem(Item):
         """ Show the user what they searched, clear the search on select """
         async def render(self, meta):
             entered_text = meta.session.get("search", None)
@@ -29,17 +24,15 @@ class SearchMenu(TrackMenu):
             self.parent_menu.items = [back_item, self]
             return await super().on_select(meta)
 
-    # async def build(self, menu_id, meta):
-    #     """
-    #     This needs to be different in order to allow user input, since without a specific
-    #     object to provide a point to return to, we need to set the environment variable to
-    #     return to this point
-    #     """
 
-    #     obj = self.clone()
-    #     obj.id = menu_id
-    #     obj.items = await obj.build_menu_items(meta=meta)
-    #     return obj
+class SearchMenu(TrackMenu):
+    """
+    Menu that allows users to type in content.
+    """
+    allow_user_input = True
+
+    def __init__(self):
+        super().__init__(track_formatter=playlist_track_label)
 
     async def generate_menu_items(self, meta):
         """ Generate track items from search according to user input """
@@ -56,7 +49,7 @@ class SearchMenu(TrackMenu):
         elif meta:
             pass
 
-        items = [BackItem(), self.SearchItem(),]
+        items = [BackItem(), SearchItem(),]
         tracks = await spotify.async_search(
             meta.session['search'],
             ) \
@@ -76,4 +69,39 @@ class SearchMenu(TrackMenu):
         
         if not meta.user_input in [item.text for item in self.items]:
             meta.session['search'] = meta.user_input
+        return Operation(constants.OP_REFRESH_MENU)
+
+
+class SearchAlbumMenu(AlbumMenu):
+    """
+
+    """
+    allow_user_input = True
+
+    def __init__(self):
+        super().__init__()
+
+    async def generate_menu_items(self, meta):
+        """
+        Generate album items from search according to user input
+        """
+        if meta.user_input:
+            meta.session['search'] = meta.user_input
+
+        items = [BackItem(), SearchItem(),]
+        albums = await spotify.async_search(
+            meta.session['search'],
+            type='album',
+        ) if meta.session.get('search') else {'items':[]}
+
+        for album in albums['items']:
+            items.append(
+                DynamicNestedMenu(text=album['name'], sub_menu_type=TrackMenu.from_album, album=album)
+            )
+
+        return items
+
+    async def on_user_input(self, meta):
+        if not meta.user_input in [item.text for item in self.items]:
+            meta.session['search'] =  meta.user_input
         return Operation(constants.OP_REFRESH_MENU)

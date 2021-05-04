@@ -22,7 +22,7 @@ class SpotifyAPI:
     and handles initialising the api client        
     """
 
-    # TODO reduce the scope to only the required permissions 
+    # TODO reduce the scope to only the required permissions
     # for operation
     # TODO add appropriate exception handling
 
@@ -113,6 +113,12 @@ class SpotifyAPI:
 
         return saved_tracks
 
+    async def async_album_tracks(self, album_id):
+        # TODO check to see if albums load fully,
+        # if not then this needs to be paged like the tracks
+        # from playlist method
+        return self.client.album_tracks(album_id)
+
     async def async_search(self, search, limit=50, type='track', pages=4):
         """
         Construct a query and return the results
@@ -120,7 +126,7 @@ class SpotifyAPI:
 
         query = "+".join(search.split())
         search_content = self.client.search(query, limit=limit, type=type)[type+'s']
-        pages_left = pages - 1 
+        pages_left = pages - 1
         while pages_left and search_content['next']:
             next_page = self.client.next(search_content)[type+'s']
             search_content.update({
@@ -130,6 +136,10 @@ class SpotifyAPI:
             pages_left -= 1
 
         return search_content
+
+    async def artist_albums(self, artist_id):
+        # TODO see it this needs to collected by pages
+        return self.client.artist_albums(artist_id)
 
     async def playback_state(self):
         return self.client.current_playback()

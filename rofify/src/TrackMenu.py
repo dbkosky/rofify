@@ -126,7 +126,7 @@ class TrackMenu(rofi_menu.Menu):
                 track=track, 
                 offset=track['offset'] if track.get('offset') is not None else offset, 
                 text=track['name']
-                )   
+                )
             )
         return [rofi_menu.BackItem()] + tracks
 
@@ -136,10 +136,23 @@ class TrackMenu(rofi_menu.Menu):
         Create a track menu from a playlist (as returned by spotipy).
         """
         prompt = "Search in {}".format(playlist['name'])
-        playlists = (await spotify.async_playlist_tracks(playlist['id']))['items']
+        playlist_tracks = (await spotify.async_playlist_tracks(playlist['id']))['items']
         return cls(
-                prompt=prompt, 
-                tracks=[playlist_item['track'] for playlist_item in playlists],
+                prompt=prompt,
+                tracks=[playlist_item['track'] for playlist_item in playlist_tracks],
                 context=playlist['uri'],
                 track_formatter=playlist_track_label,
             )
+
+    @classmethod
+    async def from_album(cls, album):
+        """
+        Create a track menu from an album (as returned by spotipy)
+        """
+        album_tracks = (await spotify.async_album_tracks(album['id']))['items']
+        [track.update({'album':album}) for track in album_tracks]
+        return cls(
+            tracks=[track for track in album_tracks],
+            context=album['uri'],
+            track_formatter=playlist_track_label,
+        )
