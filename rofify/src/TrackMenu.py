@@ -99,9 +99,7 @@ class TrackMenu(rofi_menu.Menu):
     allow_user_input=False
 
     def __init__(self, tracks=[], prompt=None, context=None, track_formatter=None):
-        super().__init__(
-            prompt = self.prompt 
-        )
+        super().__init__()
         # Tracks are a list of dicts as returned by the spotify api 
         self.tracks = tracks
         self.prompt = prompt

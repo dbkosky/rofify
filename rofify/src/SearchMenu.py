@@ -1,6 +1,7 @@
 from rofi_menu import Menu, Operation, constants, Item, BackItem
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.AlbumMenu import AlbumMenu
+from rofify.src.ArtistMenu import ArtistMenu, ArtistPage
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.TrackMenu import TrackItem, TrackMenu
 from rofify.src.utils import playlist_track_label
@@ -25,7 +26,7 @@ class SearchItem(Item):
             return await super().on_select(meta)
 
 
-class SearchMenu(TrackMenu):
+class SearchTrackMenu(TrackMenu):
     """
     Menu that allows users to type in content.
     """
@@ -105,3 +106,33 @@ class SearchAlbumMenu(AlbumMenu):
         if not meta.user_input in [item.text for item in self.items]:
             meta.session['search'] =  meta.user_input
         return Operation(constants.OP_REFRESH_MENU)
+
+class SearchArtistMenu(TrackMenu, ArtistMenu):
+    """
+
+    """
+    allow_user_input = True
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    async def generate_menu_items(self, meta):
+
+        if meta.user_input:
+            meta.session['search'] = meta.user_input
+
+        items = [BackItem(), SearchItem()]
+        artists = await spotify.async_search(
+            meta.session['search'],
+            type='artist',
+        ) if meta.session.get('search') else {'items':[]}
+
+        for artist in artists['items']:
+            items.append(
+                DynamicNestedMenu(
+                    text=artist['name'],
+                    sub_menu_type=ArtistPage,
+                    artist=artist,
+                )
+        )
+        return items
