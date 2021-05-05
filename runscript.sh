@@ -6,6 +6,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 export WIDTH=-90
 rofi -modi mymenu:$DIR/rofify/__main__.py\
-	-show mymenu -theme $DIR/rofify_theme.rasi\
+	-show mymenu\
+	-theme $DIR/rofify_theme.rasi\
 	-config $DIR/rofify.config -width $WIDTH\
 	-show-icons

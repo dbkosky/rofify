@@ -18,6 +18,7 @@ class Config:
         'playlist-track-label':'<name><album><artists>',
         'search-track-label':'<name><artists><type>',
         'header-playback-label':'<isplaying><name><artists><shuffle><repeat>',
+        'active-item-colour':'#1f782c'
     }
 
     icon_defaults = {
@@ -44,7 +45,7 @@ class Config:
 
     def get_format(self, option):
         return self._config.get(
-            section="formating",
+            section="formatting",
             option=option,
             fallback=self.formatting_defaults.get(option)
         )

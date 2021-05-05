@@ -1,14 +1,11 @@
-
 from rofify.src.SpotifyAPI import spotify
+from rofify.src.config import config
 from rofi_menu import Menu, Item, BackItem, Operation, constants
 import asyncio
 
 import sys
 
-# Formatting for currently active device
-ACTIVE_COLOR = "#48cf5c"
-# TODO move this to utils
-active_label = lambda x: f"<span foreground='{ACTIVE_COLOR}'>" + str(x) + " (active)" + "</span>" 
+active_label = lambda x: "<span foreground='{}'>".format(config.get_format('active-item-colour')) + str(x) + " (active)</span>"
 
 class DeviceItem(Item):
     """
