@@ -16,6 +16,9 @@ class SavedTracksMenu(TrackMenu):
         )
 
     async def generate_menu_items(self, meta):
+
+        await self.update_popup_meta(meta)
+
         saved_tracks = await spotify.async_all_saved_tracks()
         self.tracks = [item['track'] for item in saved_tracks['items']]
         track_items = []

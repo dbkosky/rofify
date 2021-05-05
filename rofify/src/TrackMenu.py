@@ -108,7 +108,11 @@ class TrackMenu(rofi_menu.Menu):
         # Used to format the track info into columns in the rofi menu
         self.track_formatter = track_formatter
 
-    async def generate_menu_items(self, meta):
+    async def update_popup_meta(self, meta):
+        """
+        Updates the meta with a boolean value representing whether a popup device
+        menu should occur when the track is selected.
+        """
 
         # Set the element to bring up device menu if there is no set device
         meta.session.setdefault('popup_device_menu', False)
@@ -116,6 +120,11 @@ class TrackMenu(rofi_menu.Menu):
             meta.session['popup_device_menu'] = True
         else:
             meta.session['popup_device_menu'] = False
+
+
+    async def generate_menu_items(self, meta):
+
+        await self.update_popup_meta(meta)
 
         tracks = []
         for offset,track in enumerate(self.tracks):    

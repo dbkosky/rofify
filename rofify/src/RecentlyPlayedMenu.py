@@ -16,14 +16,16 @@ class RecentlyPlayedMenu(TrackMenu):
         )
 
     async def generate_menu_items(self, meta):
-        
+
+        await self.update_popup_meta(meta)
+
         self.tracks = await spotify.get_recently_played()
         track_items = []
-        for track in self.tracks:    
+        for track in self.tracks:
             track_items.append(
                 TrackItem(
-                    track=track, 
-                    offset=track['offset'], 
+                    track=track,
+                    offset=track['offset'],
                     text=track['name']
                 )
             )

@@ -38,12 +38,7 @@ class SearchTrackMenu(TrackMenu):
     async def generate_menu_items(self, meta):
         """ Generate track items from search according to user input """
 
-        # Set the element to bring up device menu if there is no set device
-        meta.session.setdefault('popup_device_menu', False)
-        if not spotify.device.current_device:
-            meta.session['popup_device_menu'] = True
-        else:
-            meta.session['popup_device_menu'] = False
+        await self.update_popup_meta(meta)
 
         if meta.user_input:
             meta.session['search'] = meta.user_input
