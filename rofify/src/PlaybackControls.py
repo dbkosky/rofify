@@ -1,3 +1,4 @@
+from rofify.src.config import config
 import asyncio
 # TODO Make consistent what is or isn't async
 
@@ -107,3 +108,52 @@ class Playback:
             device_id=device_id,
         )
         self._playback['repeat_state'] = next_state
+
+    async def header_playback_label(self):
+        """
+        Parse the config and return a string formatted according to the config
+        for the header-playback-label option
+        """
+        # First check to see if anything is playing
+        if self._playback is None or self.current_item is None:
+            # Make sure that nothing really is playing
+            await self.update_playback()
+            if self._playback is None or self.current_item is None:
+                return config.get_state('nothing-playing')
+
+        # First we need to specify what is retrieved by the playback options
+        playback_directory = {
+            # where x is a playback object
+            '<shuffle>': lambda x : config.get_state('shuffle-off') if not x.shuffle_state else config.get_state('shuffle-on'),
+            '<repeat>': lambda x : {'off': config.get_state('repeat-off'),
+                                    'track':config.get_state('repeat-track'),
+                                    'context':config.get_state('repeat-context'),}[x.repeat_state],
+            # TODO add option for nothing playing or paused
+            '<isplaying>': lambda x : config.get_state('play') if x.playing else config.get_state('paused'),
+        }
+        playback_pattern = "(" + '|'.join(list(track_directory.keys()) + list(playback_directory.keys())) + ")"
+        structure = config.header_playback_label
+        matches = re.findall(playback_pattern, structure)
+        playback_label = ""
+
+        # Margin is going to be replaced with a seperator " - "
+        margin = 0
+
+        for index,match in enumerate(matches):
+
+            # TODO maybe add this as seperator or somthing like that in config
+
+            # These elements are found
+            if track_directory.get(match) is not None:
+                field = track_directory[match](playback.current_item)
+                playback_label += truncate(field, ((width)//len(matches)), margin, add_whitespace=False)
+
+                if index + 1 < len(matches) and (matches[index+1] in track_directory.keys()):
+                    playback_label += " - "
+
+            # These elements are formatted differently (i.e. without seperator)
+            elif playback_directory.get(match) is not None:
+                field = playback_directory[match](playback)
+                playback_label += f" {field} "
+
+        return playback_label

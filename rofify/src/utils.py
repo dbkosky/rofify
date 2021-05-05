@@ -58,9 +58,9 @@ def playlist_track_label(track):
     Parse the config and return a string formatted according to the config
     for the playlist-track-label option
     """
-    structure = config.playlist_track_label
+    structure = config.get_format('playlist-track-label')
     matches = re.findall(track_pattern, structure)
-    track_label = config.track_item_icon + " "
+    track_label = config.get_icon('track-item-icon') + " "
     for index,match in enumerate(matches):
         field_text = track_directory[match](track)
         margin = 0 if index+1 == len(matches) else 2
@@ -82,18 +82,20 @@ async def header_playback_label(playback):
         # Make sure that nothing really is playing
         await playback.update_playback()
         if playback._playback is None or playback.current_item is None:
-            return config.nothing_playing      
+            return config.get_state('nothing-playing')
 
     # First we need to specify what is retrieved by the playback options
     playback_directory = {
         # where x is a playback object
-        '<shuffle>': lambda x : config.shuffle_off if not x.shuffle_state else config.shuffle_on,
-        '<repeat>': lambda x : {'off': config.repeat_off, 'track':config.repeat_track, 'context':config.repeat_context}[x.repeat_state],
+        '<shuffle>': lambda x : config.get_state('shuffle-off') if not x.shuffle_state else config.get_state('shuffle-on'),
+        '<repeat>': lambda x : {'off': config.get_state('repeat-off'),
+                                'track':config.get_state('repeat-track'),
+                                'context':config.get_state('repeat-context')}[x.repeat_state],
         # TODO add option for nothing playing or paused
-        '<isplaying>': lambda x : config.playing if x.playing else config.paused,
+        '<isplaying>': lambda x : config.get_state('playing') if x.playing else config.get_state('paused'),
     }
     playback_pattern = "(" + '|'.join(list(track_directory.keys()) + list(playback_directory.keys())) + ")"
-    structure = config.header_playback_label
+    structure = config.get_format('header-playback-label')
     matches = re.findall(playback_pattern, structure)
     playback_label = ""
 
@@ -107,7 +109,7 @@ async def header_playback_label(playback):
         # These elements are found 
         if track_directory.get(match) is not None:
             field = track_directory[match](playback.current_item)
-            playback_label += truncate(field, ((width-20)//len(matches))-2, margin, add_whitespace=False)
+            playback_label += truncate(field, ((width)//len(matches)), margin, add_whitespace=False)
 
             if index + 1 < len(matches) and (matches[index+1] in track_directory.keys()): 
                 playback_label += " - "

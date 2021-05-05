@@ -31,8 +31,7 @@ class TrackItem(rofi_menu.Item):
         else:
             # In the case where no formatter is provided, just 
             # display the track name
-            
-            self.text = config.track_item_icon + \
+            self.text = config.get_icon('track-item-icon') + \
                 substitute_pango_escape(self.track['name'])
         self.state = meta.get_state(self.id)
 

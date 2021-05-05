@@ -1,7 +1,7 @@
 import asyncio
 from rofi_menu import NestedMenu, Operation, constants
 from rofify.src.SpotifyAPI import spotify
-import sys
+
 class DynamicNestedMenu(NestedMenu):
     """
     Item used to provide selectable playlists in the playlist menu 

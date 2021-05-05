@@ -14,133 +14,53 @@ class Config:
         if not self._config.read(config_dir):
             raise FileNotFoundError(f"Cannot find config file at {config_dir}")
 
-    # TODO repetitious, look at refactoring 
-    @property
-    def playlist_menu_icon(self):
+    formatting_defaults = {
+        'playlist-track-label':'<name><album><artists>',
+        'search-track-label':'<name><artists><type>',
+        'header-playback-label':'<isplaying><name><artists><shuffle><repeat>',
+    }
+
+    icon_defaults = {
+        'playlist-menu-icon':'蘿',
+        'track-item-icon':'',
+        'device-menu-icon':'',
+        'recently-played-menu-icon':'',
+        'saved-tracks-menu-icon':'',
+        'search-tracks-menu-icon':'',
+    }
+
+    state_defaults = {
+        'shuffle-off':'劣',
+        'shuffle-on':'列',
+
+        'repeat-off':'稜',
+        'repeat-context':'凌',
+        'repeat-track':'綾',
+
+        'playing':'Playing:',
+        'paused':'Paused:',
+        'nothing-playing':'Nothing Playing',
+    }
+
+    def get_format(self, option):
         return self._config.get(
-            section='formatting', 
-            option='playlist-menu-icon',
-            fallback="",
-        )
-    
-    @property
-    def device_menu_icon(self):
-        return self._config.get(
-            section='formatting', 
-            option='device-menu-icon',
-            fallback="",
+            section="formating",
+            option=option,
+            fallback=self.formatting_defaults.get(option)
         )
 
-    @property
-    def track_item_icon(self):
+    def get_icon(self, option):
         return self._config.get(
-            section='formatting',
-            option='track-item-icon',
-            fallback="",
+            section="formatting",
+            option=option,
+            fallback=self.icon_defaults.get(option)
         )
 
-    @property
-    def recently_played_menu_icon(self):
+    def get_state(self, option):
         return self._config.get(
-            section='formatting',
-            option='recently-played-menu-icon',
-            fallback="",
-        )
-
-    @property
-    def saved_tracks_menu_icon(self):
-        return self._config.get(
-            section='formatting',
-            option='saved-menu-icon',
-            fallback="",
-        )
-
-    @property
-    def search_tracks_menu_icon(self):
-        return self._config.get(
-            section='formatting',
-            option='search-tracks-menu-icon',
-            fallback="",
-        )
-
-    @property
-    def shuffle_off(self):
-        return self._config.get(
-            section='formatting',
-            option='shuffle-off',
-            fallback="",
-        )
-
-    @property
-    def shuffle_on(self):
-        return self._config.get(
-            section='formatting',
-            option='shuffle-on',
-            fallback="",
-        )
-
-    @property
-    def repeat_off(self):
-        return self._config.get(
-            section='formatting',
-            option='repeat-off',
-            fallback="",
-        )
-
-    @property
-    def repeat_context(self):
-        return self._config.get(
-            section='formatting',
-            option='repeat-context',
-            fallback="",
-        )
-
-    @property
-    def repeat_track(self):
-        return self._config.get(
-            section='formatting',
-            option='repeat-track',
-            fallback="",
-        )
-
-    @property
-    def paused(self):
-        return self._config.get(
-            section='formatting',
-            option='paused',
-            fallback="",
-        )
-
-    @property
-    def playing(self):
-        return self._config.get(
-            section='formatting',
-            option='playing',
-            fallback="",
-        )
-    
-    @property
-    def nothing_playing(self):
-        return self._config.get(
-            section='formatting',
-            option='nothing-playing',
-            fallback="",
-        )
-
-    @property
-    def playlist_track_label(self):
-        return self._config.get(
-            section='formatting',
-            option='playlist-track-label',
-            fallback=''
-        )
-
-    @property
-    def header_playback_label(self):
-        return self._config.get(
-            section='formatting',
-            option='header-playback-label',
-            fallback=''
+            section="formatting",
+            option=option,
+            fallback=self.state_defaults.get(option),
         )
 
     def check_credentials(self, credential):
@@ -166,7 +86,7 @@ class Config:
         try:
             return self._config['credentials']['username']
         except KeyError:
-            self.check_credentials('username')
+            self.check_redentials('username')
 
     @property
     def client_id(self):
