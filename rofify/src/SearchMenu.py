@@ -2,6 +2,7 @@ from rofi_menu import Menu, Operation, constants, Item, BackItem
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.AlbumMenu import AlbumMenu
 from rofify.src.ArtistMenu import ArtistMenu, ArtistPage
+from rofify.src.PlaylistMenu import PlaylistMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.TrackMenu import TrackItem, TrackMenu
 from rofify.src.utils import playlist_track_label
@@ -102,6 +103,7 @@ class SearchAlbumMenu(AlbumMenu):
             meta.session['search'] =  meta.user_input
         return Operation(constants.OP_REFRESH_MENU)
 
+
 class SearchArtistMenu(TrackMenu, ArtistMenu):
     """
 
@@ -130,4 +132,36 @@ class SearchArtistMenu(TrackMenu, ArtistMenu):
                     artist=artist,
                 )
         )
+        return items
+
+
+class SearchPlaylistMenu(PlaylistMenu):
+    """
+
+    """
+    allow_user_input = True
+
+    def __init__(self, **kwargs):
+        super().__init__(self, **kwargs)
+
+    async def generate_menu_items(self, meta):
+
+        if meta.user_input:
+            meta.session['search'] = meta.user_input
+
+        items = [BackItem(), SearchItem()]
+        playlists = await spotify.async_search(
+            meta.session['search'],
+            type='playlist',
+        ) if meta.session.get('search') else {'items':[]}
+
+        for playlist in playlists['items']:
+            items.append(
+                DynamicNestedMenu(
+                    sub_menu_type=TrackMenu.from_playlist,
+                    playlist=playlist,
+                    text=playlist['name'],
+                )
+        )
+
         return items

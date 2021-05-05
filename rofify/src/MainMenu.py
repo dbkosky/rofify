@@ -7,7 +7,7 @@ from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.SavedTracksMenu import SavedTracksMenu
 from rofify.src.PlaylistMenu import PlaylistMenu
 from rofify.src.DeviceMenu import DeviceMenu
-from rofify.src.SearchMenu import SearchTrackMenu, SearchAlbumMenu, SearchArtistMenu
+from rofify.src.SearchMenu import SearchTrackMenu, SearchAlbumMenu, SearchArtistMenu, SearchPlaylistMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.Hotkeys import hotkeys
 from rofify.src.config import config
@@ -48,4 +48,5 @@ class MainMenu(rofi_menu.Menu):
             DynamicNestedMenu(f"{search_tracks_icon} Search Tracks", sub_menu_type=SearchTrackMenu),
             DynamicNestedMenu(f"{search_tracks_icon} Search Albums", sub_menu_type=SearchAlbumMenu),
             DynamicNestedMenu(f"{search_tracks_icon} Search Artists", sub_menu_type=SearchArtistMenu),
+            DynamicNestedMenu(f"{search_tracks_icon} Search Playlists", sub_menu_type=SearchPlaylistMenu),
         ]
