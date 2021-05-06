@@ -1,7 +1,6 @@
 from rofi_menu import Menu, BackItem, NestedMenu, Operation, constants
 from rofify.src.TrackMenu import TrackMenu, TrackItem
 from rofify.src.SpotifyAPI import spotify
-from rofify.src.utils import playlist_track_label
 from rofify.src.config import config
 
 class RecentlyPlayedMenu(TrackMenu):
@@ -12,7 +11,7 @@ class RecentlyPlayedMenu(TrackMenu):
     def __init__(self):
         super().__init__(
             prompt="Recently Played", 
-            track_formatter=playlist_track_label
+            track_formatter=config.playlist_track_label
         )
 
     async def generate_menu_items(self, meta):

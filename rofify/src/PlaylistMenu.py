@@ -1,8 +1,8 @@
-import asyncio
 from rofi_menu import NestedMenu, Menu, Operation, constants, BackItem
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.TrackMenu import TrackMenu
 from rofify.src.SpotifyAPI import spotify
+from rofify.src.config import config
 
 class PlaylistMenu(Menu):
     """
@@ -23,7 +23,7 @@ class PlaylistMenu(Menu):
                 DynamicNestedMenu(
                     sub_menu_type=TrackMenu.from_playlist,
                     playlist=playlist,
-                    text=playlist['name'],
+                    text=config.playlist_item_label(playlist),
                 )
             )
         return nested_playlist_menus

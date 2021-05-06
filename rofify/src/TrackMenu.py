@@ -1,7 +1,7 @@
 import rofi_menu
 import asyncio
 
-from rofify.src.utils import playlist_track_label, substitute_pango_escape
+from rofify.src.utils import substitute_pango_escape
 from rofi_menu.constants import OP_EXIT, OP_REFRESH_MENU, OP_OUTPUT
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.DeviceMenu import DeviceMenu
@@ -147,7 +147,7 @@ class TrackMenu(rofi_menu.Menu):
                 prompt=prompt,
                 tracks=[playlist_item['track'] for playlist_item in playlist_tracks],
                 context=playlist['uri'],
-                track_formatter=playlist_track_label,
+                track_formatter=config.playlist_track_label,
             )
 
     @classmethod
@@ -160,5 +160,5 @@ class TrackMenu(rofi_menu.Menu):
         return cls(
             tracks=[track for track in album_tracks],
             context=album['uri'],
-            track_formatter=playlist_track_label,
+            track_formatter=config.playlist_track_label,
         )

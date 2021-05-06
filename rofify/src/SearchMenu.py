@@ -5,8 +5,7 @@ from rofify.src.ArtistMenu import ArtistMenu, ArtistPage
 from rofify.src.PlaylistMenu import PlaylistMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.TrackMenu import TrackItem, TrackMenu
-from rofify.src.utils import playlist_track_label
-import sys
+from rofify.src.config import config
 
 class SearchItem(Item):
         """ Show the user what they searched, clear the search on select """
@@ -34,7 +33,7 @@ class SearchTrackMenu(TrackMenu):
     allow_user_input = True
 
     def __init__(self):
-        super().__init__(track_formatter=playlist_track_label)
+        super().__init__(track_formatter=config.playlist_track_label)
 
     async def generate_menu_items(self, meta):
         """ Generate track items from search according to user input """

@@ -3,7 +3,8 @@ from rofify.src.TrackMenu import TrackMenu, TrackItem
 from rofify.src.AlbumMenu import AlbumMenu
 from rofify.src.SpotifyAPI import spotify
 from rofi_menu import Menu, BackItem, Item
-from rofify.src.utils import playlist_track_label, substitute_pango_escape
+from rofify.src.utils import substitute_pango_escape
+from rofify.src.config import config
 
 class ArtistMenu(Menu):
     """
@@ -34,7 +35,7 @@ class ArtistPage(Menu):
     # This menu should have a combination of the artist's top tracks and
     # all of the artists albums.
 
-    def __init__(self, artist=None, track_formatter=playlist_track_label):
+    def __init__(self, artist=None, track_formatter=config.playlist_track_label):
         self.artist = artist
         self.track_formatter=track_formatter
         self.context=None

@@ -11,7 +11,6 @@ from rofify.src.SearchMenu import SearchTrackMenu, SearchAlbumMenu, SearchArtist
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.Hotkeys import hotkeys
 from rofify.src.config import config
-from rofify.src.utils import header_playback_label
 
 class MainMenu(rofi_menu.Menu):
     icon = None
@@ -21,7 +20,7 @@ class MainMenu(rofi_menu.Menu):
     async def pre_render(self,meta):
         """ Display information regarding the current playback in the prompt
         """
-        self.prompt = await header_playback_label(spotify.playback)
+        self.prompt = await config.header_playback_label(spotify.playback)
 
     async def on_user_input(self, meta):
         """ 
