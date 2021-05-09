@@ -1,9 +1,10 @@
 import os
 import spotipy
+import pathlib
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 
-from rofify.src.config import config, cache_location
+from rofify.src.config import config
 from rofify.src.PlaybackControls import Playback
 from rofify.src.DeviceControls import Device
 
@@ -48,6 +49,10 @@ class SpotifyAPI:
     "playlist-modify-private",
     ]
 
+    cache_dir = pathlib.Path(config.cache_directory)
+    if not cache_dir.exists():
+        cache_dir.mkdir(parents=True)
+
     # Token used in credential flow
     token = util.prompt_for_user_token(
         config.username,
@@ -55,7 +60,7 @@ class SpotifyAPI:
         client_id=config.client_id,
         client_secret=config.client_secret,
         redirect_uri=config.redirect_uri,
-        cache_path=cache_location,
+        cache_path=os.path.join(config.cache_directory,'spotify_token.cache'),
     )
 
     if token:

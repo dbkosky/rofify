@@ -4,7 +4,6 @@ import configparser
 from rofify.src.utils import substitute_pango_escape, truncate
 
 user_dir = os.path.expanduser("~")
-cache_location = os.path.join( user_dir, '.config/rofify/rofi_spotify_token.cache')
 
 class Config:
     """
@@ -12,9 +11,9 @@ class Config:
     """
     def __init__(self):
         self._config = configparser.ConfigParser()
-        config_dir = os.path.join(user_dir,'.config/rofify/config')
-        if not self._config.read(config_dir):
-            raise FileNotFoundError(f"Cannot find config file at {config_dir}")
+        self.config_dir = os.path.join(user_dir,'.config/rofify/config')
+        if not self._config.read(self.config_dir):
+            self._create_default_config()
 
         # Dictionary for parsing the playlist features
     playlist_features = {
@@ -92,51 +91,76 @@ class Config:
             fallback=self.state_defaults.get(option),
         )
 
-    def check_credentials(self, credential):
+    def check_credentials(self):
         if 'credentials' not in self._config.sections():
             raise KeyError(
         "The credentials section does not exist in the config file. username could not be retrieved"
         )
         else:
             creds = [self._config.get(section='credentials', option=cred, fallback="Not found")
-            for cred in ['username','client_id','client_secret','redirect_uri']]
+            for cred in ['username','client_id','client_secret','redirect_uri', 'cache_location']]
 
-            err_string = f" \
-                {credential} credential not found \n \
-                settings parsed from the config file: \n \
-                username:      {creds[0]}, \n \
-                client_id:     {creds[1]}, \n \
-                client_secret: {creds[2]}, \n \
-                redirect_uri:  {creds[3]}"
-            raise KeyError(err_string)
+            err_string = f""+ \
+               "credential not found \n"+ \
+               "settings parsed from the config file: \n"+ \
+               f'username:       {creds[0]},\n'+ \
+               f'client_id:      {creds[1]},\n'+ \
+               f'client_secret:  {creds[2]},\n'+ \
+               f'redirect_uri:   {creds[3]},\n'+ \
+               f'cache_location: {creds[4]},\n'
+
+            print(err_string)
 
     @property
     def username(self):
         try:
             return self._config['credentials']['username']
         except KeyError:
-            self.check_redentials('username')
+            self.check_redentials()
 
     @property
     def client_id(self):
         try:
             return self._config['credentials']['client_id']
         except:
-            self.check_credentials('client_id')
+            self.check_credentials()
     
     @property
     def client_secret(self):
         try:
             return self._config['credentials']['client_secret']
         except:
-            self.check_credentials('client_secret')
+            self.check_credentials()
 
     @property
     def redirect_uri(self):
         try:
             return self._config['credentials']['redirect_uri']
         except:
-            self.check_credentials('redirect_uri')
+            self.check_credentials()
+
+    @property
+    def cache_directory(self):
+        try:
+            return self._config['credentials']["cache_directory"]
+        except:
+            self.check_credentials()
+
+
+    def _create_default_config(self):
+
+        cache_directory = os.path.join( user_dir, '.cache/rofify')
+        defaults = {
+            "username":"Your spotify username, can be found on your 'account overview'",
+            "client_id":"The client id for your application, should be found on the application page on developer.spotify.com/dashboard/application",
+            "client_secret":"The client secret for your application, should be found on the application page on developer.spotify.com/dashboard/application",
+            "redirect_uri":"http://localhost:8888/auth",
+            "cache_directory":cache_directory
+        }
+
+        self._config.add_section("credentials")
+        [self._config.set("credentials", *item) for item in defaults.items()]
+        self._config.write(open(self.config_dir, 'w'))
 
     def playlist_track_label(self, track):
         """
