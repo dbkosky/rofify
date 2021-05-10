@@ -4,7 +4,7 @@ This app is intended to provide an alternative method for controlling spotify pl
 It's inspired by the terminal application [SpoTUI](https://github.com/ceuk/SpoTUI), and makes heavy use of 
 [spotipy](https://github.com/plamere/spotipy) and [python-rofi-menu](https://github.com/miphreal/python-rofi-menu).
 
-Before you attempt to install this, it's worth noting that, at present, you need spotify premium in order to use this. You will need create an app on [the spotify devolper site](developer.spotify.com) (go to dashboard, then create an app).
+Before you attempt to install this, it's worth noting that, at present, you need spotify premium in order to use this. You will need create an app on [the spotify devolper site](https://developer.spotify.com) (go to dashboard, then create an app).
 
 To install the package run: 
 ``` sh
