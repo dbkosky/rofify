@@ -16,6 +16,7 @@ class Config:
 
         # Create the config directory
         pathlib.Path(os.path.dirname(self.config_file)).mkdir(parents=True, exist_ok=True)
+        self._config.read(self.config_file)
 
         # Dictionary for parsing the playlist features
     playlist_features = {

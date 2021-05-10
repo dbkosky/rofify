@@ -11,7 +11,7 @@ To install the package run:
 pip install rofify
 ```
 
-## Configuration
+## Setup
 You will need to add a few items to the configuration to get started.
 To create the a config file at .config/rofify/config you can run:
 ``` sh
