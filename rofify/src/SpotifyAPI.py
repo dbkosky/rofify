@@ -49,18 +49,18 @@ class SpotifyAPI:
     "playlist-modify-private",
     ]
 
-    cache_dir = pathlib.Path(config.cache_directory)
+    cache_dir = pathlib.Path(os.path.dirname(config.cache_path))
     if not cache_dir.exists():
         cache_dir.mkdir(parents=True)
 
     # Token used in credential flow
     token = util.prompt_for_user_token(
-        config.username,
-        ' '.join(scope),
+        username=config.username,
+        scope=' '.join(scope),
         client_id=config.client_id,
         client_secret=config.client_secret,
         redirect_uri=config.redirect_uri,
-        cache_path=os.path.join(config.cache_directory,'spotify_token.cache'),
+        cache_path=config.cache_path,
     )
 
     if token:

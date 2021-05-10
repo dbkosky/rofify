@@ -1,6 +1,7 @@
 import os
 import re
 import configparser
+import pathlib
 from rofify.src.utils import substitute_pango_escape, truncate
 
 user_dir = os.path.expanduser("~")
@@ -10,9 +11,13 @@ class Config:
     Class used for conveying configuration settings
     """
     def __init__(self):
-        self._config = configparser.ConfigParser()
-        self.config_dir = os.path.join(user_dir,'.config/rofify/config')
-        if not self._config.read(self.config_dir):
+        self._config = configparser.ConfigParser(allow_no_value=True)
+        self.config_file = os.path.join(user_dir,'.config/rofify/config')
+
+        # Create the config directory
+        pathlib.Path(os.path.dirname(self.config_file)).mkdir(parents=True, exist_ok=True)
+
+        if not self._config.read(self.config_file):
             self._create_default_config()
 
         # Dictionary for parsing the playlist features
@@ -103,11 +108,11 @@ class Config:
             err_string = f""+ \
                "credential not found \n"+ \
                "settings parsed from the config file: \n"+ \
-               f'username:       {creds[0]},\n'+ \
-               f'client_id:      {creds[1]},\n'+ \
-               f'client_secret:  {creds[2]},\n'+ \
-               f'redirect_uri:   {creds[3]},\n'+ \
-               f'cache_location: {creds[4]},\n'
+               f'username:        {creds[0]},\n'+ \
+               f'client_id:       {creds[1]},\n'+ \
+               f'client_secret:   {creds[2]},\n'+ \
+               f'redirect_uri:    {creds[3]},\n'+ \
+               f'cache_path:      {creds[4]},\n'
 
             print(err_string)
 
@@ -140,27 +145,77 @@ class Config:
             self.check_credentials()
 
     @property
-    def cache_directory(self):
+    def cache_path(self):
         try:
-            return self._config['credentials']["cache_directory"]
+            return self._config['credentials']["cache_path"]
         except:
             self.check_credentials()
 
 
     def _create_default_config(self):
 
-        cache_directory = os.path.join( user_dir, '.cache/rofify')
-        defaults = {
-            "username":"Your spotify username, can be found on your 'account overview'",
-            "client_id":"The client id for your application, should be found on the application page on developer.spotify.com/dashboard/application",
-            "client_secret":"The client secret for your application, should be found on the application page on developer.spotify.com/dashboard/application",
-            "redirect_uri":"http://localhost:8888/auth",
-            "cache_directory":cache_directory
+        cache_path = os.path.join(user_dir, '.cache/rofify/spotify_token.cache')
+
+        # Comments for options
+        credentials_comments = {
+            "username":         "; Spotify username, can be found on your 'account overview'",
+
+            "client_id":        "; The client id for your application, should be found on the \
+                                   application page on developer.spotify.com/dashboard/application",
+
+            "client_secret":    "; The client secret for your application, should be found on the \
+                                   application page on developer.spotify.com/dashboard/application",
         }
 
+        # Default credentials
+        credentials_defaults = {
+            "username":"username",
+            "client_id":"client_id",
+            "client_secret":"client_secret",
+            "redirect_uri":"http://localhost:8888/auth",
+            "cache_path":cache_path
+        }
         self._config.add_section("credentials")
-        [self._config.set("credentials", *item) for item in defaults.items()]
-        self._config.write(open(self.config_dir, 'w'))
+
+        # Add the credentials options to the config
+        for option,content in credentials_defaults.items():
+            # If a comment exists, set it above
+            if credentials_comments.get(option):
+                self._config.set("credentials", credentials_comments[option], None)
+
+            self._config.set("credentials", option, content)
+
+        # Comments for the formatting
+        formatting_comments = {
+            "playlist-track-label":     "; Will match: album, artists, disc_number, duration, \
+                                           episode, name, track_number, type as columns in the client",
+
+            "header-playback-label":    "; Will match the previous above (e.g. <album>, <name>, etc) \
+                                           in addtion to <shuffle>, <repeat> and <isplaying>",
+
+            "active-item-colour":       "; Active item color (e.g. the active device or track)",
+
+            "playlist-menu-icon":       "; Specify icons",
+        }
+
+        # Create the formatting section
+        self._config.add_section("formatting")
+
+        # Add the formmatting defaults to the config
+        for option, content in self.formatting_defaults.items():
+           # If a comment exists, set it above
+            if formatting_comments.get(option):
+               self._config.set("formatting", formatting_comments[option], None)
+
+            self._config.set("formatting", option, content)
+
+        # icon_defaults and state_defaults are also part of formatting
+        for option, content in self.icon_defaults.items():
+            self._config.set("formatting", option, content)
+        for option, content in self.state_defaults.items():
+            self._config.set("formatting", option, content)
+
+        self._config.write(open(self.config_file, 'w'))
 
     def playlist_track_label(self, track):
         """
