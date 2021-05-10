@@ -119,7 +119,7 @@ class Config:
         try:
             return self._config['credentials']['username']
         except KeyError:
-            self.check_redentials()
+            self.check_credentials()
 
     @property
     def client_id(self):
