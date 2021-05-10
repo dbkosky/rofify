@@ -6,7 +6,7 @@ with open("README.md", 'r') as fh:
 setup(
 
     name="rofify",
-    version="0.0.11",
+    version="0.0.2",
     description="Rofi menu script that controls spotify playback.",
     url="https://github.com/dbkosky/rofify.git",
     author="Daniel Kosky",

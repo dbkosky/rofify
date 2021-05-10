@@ -17,9 +17,6 @@ class Config:
         # Create the config directory
         pathlib.Path(os.path.dirname(self.config_file)).mkdir(parents=True, exist_ok=True)
 
-        if not self._config.read(self.config_file):
-            self._create_default_config()
-
         # Dictionary for parsing the playlist features
     playlist_features = {
         '<collaborative>'    : lambda x : "collaborative" if x['collaborative'] else "non-collaborative",
@@ -160,11 +157,11 @@ class Config:
         credentials_comments = {
             "username":         "; Spotify username, can be found on your 'account overview'",
 
-            "client_id":        "; The client id for your application, should be found on the \
-                                   application page on developer.spotify.com/dashboard/application",
+            "client_id":        "; The client id for your application, should be found on the "+ \
+                                   "application page on developer.spotify.com/dashboard/application",
 
-            "client_secret":    "; The client secret for your application, should be found on the \
-                                   application page on developer.spotify.com/dashboard/application",
+            "client_secret":    "; The client secret for your application, should be found on the "+ \
+                                   "application page on developer.spotify.com/dashboard/application",
         }
 
         # Default credentials
@@ -187,11 +184,11 @@ class Config:
 
         # Comments for the formatting
         formatting_comments = {
-            "playlist-track-label":     "; Will match: album, artists, disc_number, duration, \
-                                           episode, name, track_number, type as columns in the client",
+            "playlist-track-label":     "; Will match: <album>, <artists>, <disc_number>, <duration>, "+ \
+                                           "<episode>, <name>, <track_number>, <type> as columns in the client",
 
-            "header-playback-label":    "; Will match the previous above (e.g. <album>, <name>, etc) \
-                                           in addtion to <shuffle>, <repeat> and <isplaying>",
+            "header-playback-label":    "; Will match the previous above (e.g. <album>, <name>, etc) "+ \
+                                           "in addtion to <shuffle>, <repeat> and <isplaying>",
 
             "active-item-colour":       "; Active item color (e.g. the active device or track)",
 

@@ -7,7 +7,7 @@ if __name__ == "__main__":
     if "--create-config" in sys.argv:
         config._create_default_config()
 
-    if "--create-token" in sys.argv:
+    elif "--create-token" in sys.argv:
         import spotipy.util as util
 
         scope = [
