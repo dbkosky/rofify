@@ -110,6 +110,7 @@ class Playback:
         self._playback['repeat_state'] = next_state
 
     async def header_playback_label(self):
+        # TODO Maybe move this to config as well
         """
         Parse the config and return a string formatted according to the config
         for the header-playback-label option
