@@ -15,7 +15,7 @@ class PlayPauseItem(rofi_menu.Item):
          Item text should be play or pause depending on if the
          current track is either paused or playing respectively
          """
-         self.text = "Pause" if spotify.playback.playing else "Play"
+         self.text = "<b><u>Playing</u></b> Paused" if spotify.playback.playing else "Playing <b><u>Paused</u></b>"
          await super().load(meta)
 
     async def on_select(self, meta):
@@ -49,6 +49,22 @@ class PreviousItem(rofi_menu.Item):
         await spotify.playback.previous()
         return await super().on_select(meta)
 
+class ShuffleItem(rofi_menu.Item):
+
+    text_on = "Shuffle: <b><u>on</u></b> off"
+    text_off = "Shuffle: on <b><u>off</u></b>"
+    async def on_select(self, meta):
+        """ Toggle the shuffle setting
+        """
+        next_state = not spotify.playback.shuffle_state
+        await spotify.playback.toggle_shuffle()
+        spotify.playback._playback['shuffle_state'] = next_state
+        return await super().on_select(meta)
+
+    async def load(self, meta):
+        self.text = self.text_on if spotify.playback.shuffle_state else self.text_off
+        super().load(meta)
+
 class PlaybackMenu(rofi_menu.Menu):
     icon = None
     prompt = None
@@ -65,10 +81,12 @@ class PlaybackMenu(rofi_menu.Menu):
         if not spotify.playback._playback:
             await spotify.playback.update_playback()
 
-        items = [rofi_menu.BackItem(),
-                 PlayPauseItem(),
-                 NextItem(),
-                 PreviousItem(),
+        items = [
+            rofi_menu.BackItem(),
+            PlayPauseItem(),
+            NextItem(),
+            PreviousItem(),
+            ShuffleItem(),
                 ]
 
         return items
