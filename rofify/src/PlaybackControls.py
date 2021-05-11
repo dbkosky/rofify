@@ -1,6 +1,7 @@
 from rofify.src.config import config
 import asyncio
 # TODO Make consistent what is or isn't async
+import sys
 
 class Playback:
     """
@@ -14,11 +15,18 @@ class Playback:
         self.parent = parent
         self._client = self.parent.client
 
+        # This is used by to update information about the playback
+        # between menu executions
+        self.meta = None
 
     async def update_playback(self):
         # The playback is updated this way in order to control
         # the number of calls made to the api
         self._playback = self._client.current_playback()
+        if self.meta:
+            self.meta.session['is_playing'] = self._playback['is_playing']
+            self.meta.session['shuffle_state'] = self._playback['shuffle_state']
+            self.meta.session['repeat_state'] = self._playback['repeat_state']
 
     @property
     def song_name(self):
@@ -68,7 +76,11 @@ class Playback:
                 self._client.pause_playback()
             else:
                 self._client.start_playback()
+
             self._playback['is_playing'] = not self._playback['is_playing']
+            # Put this in the meta
+            if self.meta:
+                self.meta.session['is_playing'] = self._playback['is_playing']
 
     async def previous(self):
         await self.update_playback()
@@ -95,6 +107,9 @@ class Playback:
             device_id=device_id,
         )
         self._playback['shuffle_state'] = next_shuffle
+            # Put this in the meta
+        if self.meta:
+            self.meta.session['shuffle_state'] = self._playback['shuffle_state']
 
     async def cycle_repeat(self, device_id=None):
         await self.update_playback()
@@ -108,6 +123,8 @@ class Playback:
             device_id=device_id,
         )
         self._playback['repeat_state'] = next_state
+        if self.meta:
+            self.meta.session['repeat_state'] = self._playback['repeat_state']
 
     async def header_playback_label(self):
         # TODO Maybe move this to config as well
