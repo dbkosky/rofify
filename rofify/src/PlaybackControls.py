@@ -24,9 +24,12 @@ class Playback:
         # the number of calls made to the api
         self._playback = self._client.current_playback()
         if self.meta:
-            self.meta.session['is_playing'] = self._playback['is_playing']
-            self.meta.session['shuffle_state'] = self._playback['shuffle_state']
-            self.meta.session['repeat_state'] = self._playback['repeat_state']
+            self.update_meta()
+
+    def update_meta(self):
+        self.meta.session['is_playing'] = self._playback['is_playing']
+        self.meta.session['shuffle_state'] = self._playback['shuffle_state']
+        self.meta.session['repeat_state'] = self._playback['repeat_state']
 
     @property
     def song_name(self):
@@ -62,7 +65,7 @@ class Playback:
         """
         await self.update_playback()
         if self._playback is not None:
-            if self._playback['is_playing']:
+            if self.meta.session['is_playing']:
                 return "Playing: {} - {}".format(self.song_name, self.artist_names)
             else:
                 return "Paused:  {} - {}".format(self.song_name, self.artist_names)
@@ -127,7 +130,6 @@ class Playback:
             self.meta.session['repeat_state'] = self._playback['repeat_state']
 
     async def header_playback_label(self):
-        # TODO Maybe move this to config as well
         """
         Parse the config and return a string formatted according to the config
         for the header-playback-label option
@@ -142,12 +144,12 @@ class Playback:
         # First we need to specify what is retrieved by the playback options
         playback_directory = {
             # where x is a playback object
-            '<shuffle>': lambda x : config.get_state('shuffle-off') if not x.shuffle_state else config.get_state('shuffle-on'),
+            '<shuffle>': lambda x : config.get_state('shuffle-off') if not x.meta.session['shuffle_state'] else config.get_state('shuffle-on'),
             '<repeat>': lambda x : {'off': config.get_state('repeat-off'),
                                     'track':config.get_state('repeat-track'),
-                                    'context':config.get_state('repeat-context'),}[x.repeat_state],
+                                    'context':config.get_state('repeat-context'),}[x.meta.session['repeat_state']],
             # TODO add option for nothing playing or paused
-            '<isplaying>': lambda x : config.get_state('play') if x.playing else config.get_state('paused'),
+            '<isplaying>': lambda x : config.get_state('play') if x.meta.session['playing'] else config.get_state('paused'),
         }
         playback_pattern = "(" + '|'.join(list(track_directory.keys()) + list(playback_directory.keys())) + ")"
         structure = config.header_playback_label

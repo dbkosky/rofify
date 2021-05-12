@@ -56,7 +56,7 @@ class Config:
         'device-menu-icon':'',
         'recently-played-menu-icon':'',
         'saved-tracks-menu-icon':'',
-        'search-tracks-menu-icon':'',
+        'search-tracks-menu-icon':'',
         'playlist-item-icon':'蘿',
     }
 

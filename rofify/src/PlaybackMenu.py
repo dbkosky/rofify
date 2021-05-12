@@ -97,12 +97,6 @@ class PlaybackMenu(rofi_menu.Menu):
 
     async def generate_menu_items(self, meta):
 
-        if not spotify.playback.meta:
-            spotify.playback.meta = meta
-            meta.session.setdefault('is_playing', False)
-            meta.session.setdefault('shuffle_state', 'off')
-            meta.session.setdefault('repeat_state', 'off')
-
         if not spotify.playback._playback:
             await spotify.playback.update_playback()
 
