@@ -23,7 +23,7 @@ class Playback:
         # The playback is updated this way in order to control
         # the number of calls made to the api
         self._playback = self._client.current_playback()
-        if self.meta:
+        if self.meta and self._playback:
             self.update_meta()
 
     def update_meta(self):
