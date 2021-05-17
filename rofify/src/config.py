@@ -52,7 +52,7 @@ class Config:
 
     icon_defaults = {
         'playlist-menu-icon':'蘿',
-        'track-item-icon':'ﱘ',
+        'track-item-icon':'',
         'device-menu-icon':'',
         'recently-played-menu-icon':'',
         'saved-tracks-menu-icon':'',
