@@ -35,3 +35,23 @@ Try and see if the package is working by typing running Rofi:
 rofi -modi spotify:"python -m rofify" -show spotify
 ```
 
+If you want to run rofify with hotkeys you'll need to create or modify custom key bindings in your rofi config. For example:
+
+```
+! Previous track
+rofi.kb-custom-1:   Super+Left
+
+! Next track
+rofi.kb-custom-2:   Super+Right
+
+! Toggle pause/play
+rofi.kb-custom-3:   Super+space
+
+! Toggle shuffle
+rofi.kb-custom-4:   Super+s
+
+! Cycle repeat sstate
+rofi.kb-custom-5:   Super+r
+```
+
+These are convenient keybindings for me, but some experimentation might be needed depending on your setup. Make sure that any keybinding you use isn't already used by another default rofi keybinding or it will throw an error (you can get a full list of the config options by running rofi -dump-config). 
