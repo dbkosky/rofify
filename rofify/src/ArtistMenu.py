@@ -2,11 +2,12 @@ from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.TrackMenu import TrackMenu, TrackItem
 from rofify.src.AlbumMenu import AlbumMenu
 from rofify.src.SpotifyAPI import spotify
-from rofi_menu import Menu, BackItem, Item
+import rofi_menu
 from rofify.src.utils import substitute_pango_escape
 from rofify.src.config import config
+from rofify.src.Hotkeys import hotkeys
 
-class ArtistMenu(Menu):
+class ArtistMenu(rofi_menu.Menu):
     """
     Provide a list of album items
     """
@@ -18,7 +19,7 @@ class ArtistMenu(Menu):
         """
         Generate a list of selected album items
         """
-        items = [BackItem()]
+        items = [rofi_menu.BackItem()]
         for artist in self.artists['items']:
             items.append(
                 DynamicNestedMenu(
@@ -31,7 +32,7 @@ class ArtistMenu(Menu):
         return items
 
 
-class ArtistPage(Menu):
+class ArtistPage(rofi_menu.Menu):
     # This menu should have a combination of the artist's top tracks and
     # all of the artists albums.
 
@@ -50,9 +51,9 @@ class ArtistPage(Menu):
         else:
             meta.session['popup_device_menu'] = False
 
-        items = [BackItem()]
+        items = [rofi_menu.BackItem()]
 
-        top_tracks = Item(nonselectable=True, text=f"{self.artist['name']} Top Tracks:")
+        top_tracks = rofi_menu.Item(nonselectable=True, text=f"{self.artist['name']} Top Tracks:")
         items.append(top_tracks)
 
         top_tracks = spotify.client.artist_top_tracks(self.artist['id'])['tracks']
@@ -65,7 +66,7 @@ class ArtistPage(Menu):
                 )
             )
 
-        artist_albums = Item(nonselectable=True, text=f"{self.artist['name']} Albums:")
+        artist_albums = rofi_menu.Item(nonselectable=True, text=f"{self.artist['name']} Albums:")
         items.append(artist_albums)
 
         for album in albums:
@@ -78,3 +79,8 @@ class ArtistPage(Menu):
             )
 
         return items
+
+    async def on_user_input(self, meta):
+
+        await hotkeys.handle_user_input()
+        return rofi_menu.Operation(rofi_menu.constants.OP_REFRESH_MENU)
