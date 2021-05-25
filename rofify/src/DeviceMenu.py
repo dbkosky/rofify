@@ -67,5 +67,4 @@ class DeviceMenu(rofi_menu.Menu):
     async def on_user_input(self, meta):
 
         await hotkeys.handle_user_input()
-
         return rofi_menu.Operation(rofi_menu.constants.OP_REFRESH_MENU)
