@@ -6,6 +6,8 @@ from rofify.src.PlaylistMenu import PlaylistMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.TrackMenu import TrackItem, TrackMenu
 from rofify.src.config import config
+from rofify.src.Hotkeys import hotkeys
+import os
 
 class SearchItem(Item):
         """ Show the user what they searched, clear the search on select """
@@ -40,7 +42,7 @@ class SearchTrackMenu(TrackMenu):
 
         await self.update_popup_meta(meta)
 
-        if meta.user_input:
+        if meta.user_input and os.getenv("ROFI_RETV") == "2":
             meta.session['search'] = meta.user_input
         elif meta:
             pass
@@ -62,7 +64,9 @@ class SearchTrackMenu(TrackMenu):
         return items
 
     async def on_user_input(self, meta):
-        
+
+        await hotkeys.handle_user_input()
+
         if not meta.user_input in [item.text for item in self.items]:
             meta.session['search'] = meta.user_input
         return Operation(constants.OP_REFRESH_MENU)
@@ -81,7 +85,7 @@ class SearchAlbumMenu(AlbumMenu):
         """
         Generate album items from search according to user input
         """
-        if meta.user_input:
+        if meta.user_input and os.getenv("ROFI_RETV") == "2":
             meta.session['search'] = meta.user_input
 
         items = [BackItem(), SearchItem(),]
@@ -98,6 +102,8 @@ class SearchAlbumMenu(AlbumMenu):
         return items
 
     async def on_user_input(self, meta):
+
+        await hotkeys.handle_user_input()
         if not meta.user_input in [item.text for item in self.items]:
             meta.session['search'] =  meta.user_input
         return Operation(constants.OP_REFRESH_MENU)
@@ -114,7 +120,7 @@ class SearchArtistMenu(TrackMenu, ArtistMenu):
 
     async def generate_menu_items(self, meta):
 
-        if meta.user_input:
+        if meta.user_input and os.getenv("ROFI_RETV") == "2":
             meta.session['search'] = meta.user_input
 
         items = [BackItem(), SearchItem()]
@@ -133,6 +139,14 @@ class SearchArtistMenu(TrackMenu, ArtistMenu):
         )
         return items
 
+    async def on_user_input(self, meta):
+
+        await hotkeys.handle_user_input()
+        if not meta.user_input in [item.text for item in self.items]:
+            meta.session['search'] =  meta.user_input
+        return Operation(constants.OP_REFRESH_MENU)
+
+
 
 class SearchPlaylistMenu(PlaylistMenu):
     """
@@ -145,7 +159,7 @@ class SearchPlaylistMenu(PlaylistMenu):
 
     async def generate_menu_items(self, meta):
 
-        if meta.user_input:
+        if meta.user_input and os.getenv("ROFI_RETV") == "2":
             meta.session['search'] = meta.user_input
 
         items = [BackItem(), SearchItem()]
@@ -164,3 +178,10 @@ class SearchPlaylistMenu(PlaylistMenu):
         )
 
         return items
+
+    async def on_user_input(self, meta):
+
+        await hotkeys.handle_user_input()
+        if not meta.user_input in [item.text for item in self.items]:
+            meta.session['search'] =  meta.user_input
+        return Operation(constants.OP_REFRESH_MENU)
