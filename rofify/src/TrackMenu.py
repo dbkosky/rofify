@@ -7,6 +7,7 @@ from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.DeviceMenu import DeviceMenu
 from rofify.src.SpotifyAPI import spotify
 from rofify.src.config import config
+from rofify.src.Hotkeys import hotkeys
 
 class TrackItem(rofi_menu.Item):
     """
@@ -31,8 +32,7 @@ class TrackItem(rofi_menu.Item):
         else:
             # In the case where no formatter is provided, just 
             # display the track name
-            self.text = config.get_icon('track-item-icon') + \
-                substitute_pango_escape(self.track['name'])
+            self.text = config.get_icon('track-item-icon') + substitute_pango_escape(self.track['name'])
         self.state = meta.get_state(self.id)
 
     async def on_select(self, meta):
@@ -134,7 +134,13 @@ class TrackMenu(rofi_menu.Menu):
                 text=track['name']
                 )
             )
+
         return [rofi_menu.BackItem()] + tracks
+
+    async def on_user_input(self, meta):
+
+        await hotkeys.handle_user_input()
+        return rofi_menu.Operation(rofi_menu.constants.OP_REFRESH_MENU)
 
     @classmethod
     async def from_playlist(cls, playlist):
