@@ -2,10 +2,8 @@ import rofi_menu
 import asyncio
 
 from rofify.src.SpotifyAPI import spotify
-from rofify.src.Hotkeys import Hotkeys
+from rofify.src.Hotkeys import hotkeys
 from rofify.src.config import config
-
-import sys
 
 class PlayPauseItem(rofi_menu.Item):
 

@@ -1,10 +1,11 @@
-from rofi_menu import NestedMenu, Menu, Operation, constants, BackItem
+import rofi_menu
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.TrackMenu import TrackMenu
 from rofify.src.SpotifyAPI import spotify
+from rofify.src.Hotkeys import hotkeys
 from rofify.src.config import config
 
-class PlaylistMenu(Menu):
+class PlaylistMenu(rofi_menu.Menu):
     """
     Menu the provides the user the option to select from their playlists.
     Should be accessible from the main menu.
@@ -14,10 +15,10 @@ class PlaylistMenu(Menu):
         super().__init__()
         self.prompt="Playlists"
 
-    async def generate_menu_items(self,meta):
+    async def generate_menu_items(self, meta):
         """ All playlists from the current user as nested menus
         """
-        nested_playlist_menus = [BackItem()]
+        nested_playlist_menus = [rofi_menu.BackItem()]
         for playlist in (await spotify.async_all_playlists()):
             nested_playlist_menus.append(
                 DynamicNestedMenu(
@@ -27,3 +28,7 @@ class PlaylistMenu(Menu):
                 )
             )
         return nested_playlist_menus
+
+    async def on_user_input(self, meta):
+        await hotkeys.handle_user_input()
+        return rofi_menu.Operation(rofi_menu.OP_REFRESH_MENU)
