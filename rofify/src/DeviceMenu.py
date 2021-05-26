@@ -64,6 +64,13 @@ class DeviceMenu(rofi_menu.Menu):
         
         return items
 
+    async def pre_render(self, meta):
+        """
+        The playback label contains info about the current playback.
+        """
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
+
     async def on_user_input(self, meta):
 
         await hotkeys.handle_user_input()

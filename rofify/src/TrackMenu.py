@@ -121,6 +121,12 @@ class TrackMenu(rofi_menu.Menu):
         else:
             meta.session['popup_device_menu'] = False
 
+    async def pre_render(self, meta):
+        """
+        The playback label contains info about the current playback.
+        """
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
 
     async def generate_menu_items(self, meta):
 
@@ -147,7 +153,6 @@ class TrackMenu(rofi_menu.Menu):
         """
         Create a track menu from a playlist (as returned by spotipy).
         """
-        prompt = "Search in {}".format(playlist['name'])
         playlist_tracks = (await spotify.async_playlist_tracks(playlist['id']))['items']
         return cls(
                 prompt=prompt,

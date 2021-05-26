@@ -1,6 +1,7 @@
 from rofify.src.DynamicNestedMenu import DynamicNestedMenu
 from rofify.src.TrackMenu import TrackMenu
 from rofify.src.SpotifyAPI import spotify
+from rofify.src.config import config
 from rofi_menu import Menu, BackItem
 
 class AlbumMenu(Menu):
@@ -9,7 +10,13 @@ class AlbumMenu(Menu):
     """
     def __init__(self, albums=None):
         self.albums = albums
+
         super().__init__()
+
+    async def pre_render(self, meta):
+
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
 
     async def generate_menu_items(self, meta):
         """

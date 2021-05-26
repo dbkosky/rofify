@@ -15,6 +15,14 @@ class PlaylistMenu(rofi_menu.Menu):
         super().__init__()
         self.prompt="Playlists"
 
+
+    async def pre_render(self, meta):
+        """
+        The playback label contains info about the current playback.
+        """
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
+
     async def generate_menu_items(self, meta):
         """ All playlists from the current user as nested menus
         """

@@ -15,6 +15,13 @@ class ArtistMenu(rofi_menu.Menu):
         self.artists = artists
         super().__init__()
 
+    async def pre_render(self, meta):
+        """
+        The playback label contains info about the current playback.
+        """
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
+
     async def generate_menu_items(self, meta):
         """
         Generate a list of selected album items
@@ -41,6 +48,13 @@ class ArtistPage(rofi_menu.Menu):
         self.track_formatter=track_formatter
         self.context=None
         super().__init__()
+
+    async def pre_render(self, meta):
+        """
+        The playback label contains info about the current playback.
+        """
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
 
     async def generate_menu_items(self, meta):
 
