@@ -97,12 +97,11 @@ class TrackMenu(rofi_menu.Menu):
 
     allow_user_input=False
 
-    def __init__(self, tracks=[], prompt=None, context=None, track_formatter=None):
+    def __init__(self, tracks=[], context=None, track_formatter=None):
         super().__init__()
         # Tracks are a list of dicts as returned by the spotify api 
         self.tracks = tracks
-        self.prompt = prompt
-        # The context is a uri used to control playback (i.e. is the 
+        # The context is a uri used to control playback (i.e. is the
         # song being played from a playlist, album, etc) 
         self.context = context
         # Used to format the track info into columns in the rofi menu
@@ -155,7 +154,6 @@ class TrackMenu(rofi_menu.Menu):
         """
         playlist_tracks = (await spotify.async_playlist_tracks(playlist['id']))['items']
         return cls(
-                prompt=prompt,
                 tracks=[playlist_item['track'] for playlist_item in playlist_tracks],
                 context=playlist['uri'],
                 track_formatter=config.playlist_track_label,
