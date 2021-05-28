@@ -11,6 +11,8 @@ To install the package run:
 pip install rofify
 ```
 
+![selecting from a playlist in rofify](previews/playlists.webm)
+
 ## Setup
 You will need to add a few items to the configuration to get started.
 To create the a config file at .config/rofify/config you can run:
@@ -54,4 +56,4 @@ rofi.kb-custom-4:   Super+s
 rofi.kb-custom-5:   Super+r
 ```
 
-These are convenient keybindings for me, but some experimentation might be needed depending on your setup. Make sure that any keybinding you use isn't already used by another default rofi keybinding or it will throw an error (you can get a full list of the config options by running rofi -dump-config). 
+These are convenient keybindings for me, but some experimentation might be needed depending on your setup. Make sure that any keybinding you use isn't already used by another default rofi keybinding or it will throw an error (you can get a full list of the config options by running rofi -dump-config).
