@@ -44,9 +44,9 @@ class SpotifyAPI:
     "user-modify-playback-state",
     
     # Playlist/ Library modification permssions
-    "user-library-modify",
-    "playlist-modify-public",
-    "playlist-modify-private",
+    # "user-library-modify",
+    # "playlist-modify-public",
+    # "playlist-modify-private",
     ]
 
     cache_dir = pathlib.Path(os.path.dirname(config.cache_path))
