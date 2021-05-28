@@ -83,8 +83,14 @@ class RepeatItem(rofi_menu.Item):
 
 class PlaybackMenu(rofi_menu.Menu):
     icon = None
-    prompt = None
     allow_user_input = True
+
+    async def pre_render(self, meta):
+        """
+        The playback label contains info about the current playback.
+        """
+        self.prompt = await config.header_playback_label(spotify.playback)
+        await super().pre_render(meta)
 
     async def on_user_input(self, meta):
         """
