@@ -11,7 +11,7 @@ To install the package run:
 pip install rofify
 ```
 
-![selecting from a playlist in rofify](previews/playlists.webm)
+![selecting from a playlist in rofify](previews/playlists.gif)
 
 ## Setup
 You will need to add a few items to the configuration to get started.
