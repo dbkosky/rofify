@@ -77,7 +77,6 @@ class TrackItem(rofi_menu.Item):
             obj = await DynamicNestedMenu(
                 text=parent_menu.track_formatter(self.track),
                 sub_menu_type=DeviceMenu,
-                prompt='Select a device',
             ).build(
                 parent_menu=parent_menu,
                 item_id=item_id,
@@ -99,7 +98,8 @@ class TrackMenu(rofi_menu.Menu):
 
     def __init__(self, tracks=[], context=None, track_formatter=None):
         super().__init__()
-        # Tracks are a list of dicts as returned by the spotify api 
+        prompt = None
+        # Tracks are a list of dicts as returned by the spotify api
         self.tracks = tracks
         # The context is a uri used to control playback (i.e. is the
         # song being played from a playlist, album, etc) 

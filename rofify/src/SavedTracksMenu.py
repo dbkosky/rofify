@@ -9,10 +9,7 @@ class SavedTracksMenu(TrackMenu):
     listen to by selecting. Should be accessible from the top menu.
     """
     def __init__(self):
-        super().__init__(
-            prompt="Saved Tracks", 
-            track_formatter=config.playlist_track_label
-        )
+        super().__init__(track_formatter=config.playlist_track_label)
 
     async def pre_render(self, meta):
         """

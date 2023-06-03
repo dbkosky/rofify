@@ -18,7 +18,7 @@ class MainMenu(rofi_menu.Menu):
     prompt = None
     allow_user_input = True
 
-    async def pre_render(self,meta):
+    async def pre_render(self, meta):
         """ Display information regarding the current playback in the prompt
         """
         self.prompt = await config.header_playback_label(spotify.playback)
@@ -30,7 +30,7 @@ class MainMenu(rofi_menu.Menu):
         await hotkeys.handle_user_input()
         return rofi_menu.Operation(rofi_menu.OP_REFRESH_MENU)
 
-    async def generate_menu_items(self,meta):
+    async def generate_menu_items(self, meta):
         # set meta defaults
         meta.session.setdefault('search', "")
 
