@@ -28,14 +28,17 @@ configuration {
 element {
   padding: 5;
   orientation: horizontal;
-  text-color: @blue;
 }
 
 element-icon {
   size:   1.8ch;
 }
 
-element selected {
+element-text {
+  text-color: @blue;
+}
+
+element-text selected {
   text-color: @purple;
 }
 
@@ -60,7 +63,6 @@ mainbox {
 prompt {
     enabled: 						true;
     padding:                        10px;
-	background-color: 				@background-light;
 	text-color: 					@accent;
     border:                  		2px 2px 2px 2px;
     border-radius:                  0px;
@@ -81,7 +83,7 @@ textbox-prompt-spotifyicon {
 	background-color: 				@accent;
   font: "Hurmit Nerd Font 20";
 	text-color: 					@bg;
-    padding:                        12px 10px 0px 10px;
+    padding:                        9px 10px 0px 10px;
 }
 
 inputbar {
