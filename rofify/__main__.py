@@ -44,4 +44,4 @@ if __name__ == "__main__":
 
     else:
         from rofify.src.MainMenu import MainMenu
-        rofi_menu.run(MainMenu(),debug=True)
+        rofi_menu.run(MainMenu())
