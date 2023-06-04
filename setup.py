@@ -6,7 +6,7 @@ with open("README.md", 'r') as fh:
 setup(
 
     name="rofify",
-    version="0.0.3",
+    version="0.0.4",
     description="Rofi menu script that controls spotify playback.",
     url="https://github.com/dbkosky/rofify.git",
     author="Daniel Kosky",
@@ -24,7 +24,10 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
 
-    install_requires=["spotipy>=2.7.0","spotipy<=2.18.0","rofi_menu>=0.5.1","rofi_menu<=0.6",],
-
-
+    install_requires=[
+        "spotipy>=2.7.0",
+        "spotipy<=2.18.0",
+        "rofi_menu>=0.5.1",
+        "rofi_menu<=0.6",
+    ],
 )
