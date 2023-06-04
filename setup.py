@@ -16,6 +16,7 @@ setup(
     long_description_content_type="text/markdown",
 
     packages=find_packages(),
+    keywords=['spotify', 'rofi'],
 
     license="MIT",
     classifiers=[
