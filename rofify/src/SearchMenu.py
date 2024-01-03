@@ -16,7 +16,7 @@ class SearchItem(Item):
             if entered_text:
                 return f"<b>Clear Search</b>: <i>{entered_text}</i>"
             else:
-                return f"<b>Search results will show up bellow</b>"
+                return f"<b>Search results will show up below</b>"
 
         async def on_select(self, meta):
             """ Clear the search """
